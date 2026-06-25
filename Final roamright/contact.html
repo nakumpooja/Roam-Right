@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Contact Us – RoamRight</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background: #f7f7f7;
+      }
+
+      .contact-form-card {
+        max-width: 700px;
+        margin: 50px auto;
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      }
+
+      h2 {
+        margin-bottom: 25px;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 20px;
+      }
+
+      .form-group {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        font-size: 16px;
+      }
+
+      textarea {
+        resize: none;
+      }
+
+      .btn-primary {
+        width: 100%;
+        padding: 18px;
+        border: none;
+        border-radius: 40px;
+        background: #e69547;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      .btn-primary:hover {
+        background: #d98330;
+      }
+
+      @media (max-width: 768px) {
+        .form-row {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAVBAR -->
+
+    <nav class="navbar" id="navbar">
+      <div class="nav-logo" onclick="location.href = 'index.html'">
+        Roam<span>Right</span>
+      </div>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="destinations.html">Destinations</a></li>
+        <li><a href="trips.html">Plan Trip</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- HERO -->
+
+    <section class="page-hero short">
+      <div class="page-hero-overlay"></div>
+
+      <div class="page-hero-content">
+        <p class="hero-tag">✦ We'd Love to Hear From You</p>
+
+        <h1>Contact Us</h1>
+
+        <p>Have a question, idea, or need help planning your trip?</p>
+      </div>
+    </section>
+
+    <!-- CONTACT FORM -->
+
+    <div class="contact-form-card">
+      <h2>Send Us a Message</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name *</label>
+
+          <input type="text" id="firstName" placeholder="Arjun" />
+        </div>
+
+        <div class="form-group">
+          <label>Last Name *</label>
+
+          <input type="text" id="lastName" placeholder="Patel" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address *</label>
+
+        <input type="email" id="email" placeholder="arjun@example.com" />
+      </div>
+
+      <div class="form-group">
+        <label>City</label>
+
+        <select id="city">
+          <option value="">Select City</option>
+          <option>Ahmedabad</option>
+          <option>Rajkot</option>
+          <option>Surat</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Subject *</label>
+
+        <input type="text" id="subject" placeholder="What's this about?" />
+      </div>
+
+      <div class="form-group">
+        <label>Your Message *</label>
+
+        <textarea
+          id="message"
+          rows="5"
+          placeholder="Write your message here..."
+        ></textarea>
+      </div>
+
+      <button type="button" class="btn-primary" onclick="submitContact()">
+        Send Message ✈️
+      </button>
+    </div>
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+      function submitContact() {
+        let firstName = document.getElementById("firstName").value.trim();
+
+        let lastName = document.getElementById("lastName").value.trim();
+
+        let email = document.getElementById("email").value.trim();
+
+        let subject = document.getElementById("subject").value.trim();
+
+        let message = document.getElementById("message").value.trim();
+
+        if (
+          firstName === "" ||
+          lastName === "" ||
+          email === "" ||
+          subject === "" ||
+          message === ""
+        ) {
+          alert("Please fill all required fields!");
+          return;
+        }
+
+        let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+        if (!email.match(emailPattern)) {
+          alert("Please enter valid email!");
+          return;
+        }
+
+        alert("Message Sent Successfully ✈️");
+
+        document.getElementById("firstName").value = "";
+        document.getElementById("lastName").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("city").value = "";
+        document.getElementById("subject").value = "";
+        document.getElementById("message").value = "";
+      }
+    </script>
+  </body>
+</html>
