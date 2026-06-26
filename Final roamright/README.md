@@ -76,47 +76,47 @@ The website was designed in Figma and developed using **HTML, CSS, JavaScript, a
 ## 📸 Project Screenshots
 
 <p align="center">
-  <img src="assets/screenshots/home.jpeg" width="45%" alt="Home Page">
-  <img src="assets/screenshots/login.jpeg" width="45%" alt="Login Page">
+  <img src="./assets/Screenshots/home.jpeg" width="45%" alt="Home Page">
+  <img src="./assets/Screenshots/login.jpeg" width="45%" alt="Login Page">
 </p>
 
 <p align="center">
-  <img src="assets/screenshots/destination.jpeg" width="45%" alt="Destination Page">
-  <img src="assets/screenshots/trip.jpeg" width="45%" alt="Trip Planning Page">
+  <img src="./assets/Screenshots/destination.jpeg" width="45%" alt="Destination Page">
+  <img src="./assets/Screenshots/trip.jpeg" width="45%" alt="Trip Planning Page">
 </p>
 
 <p align="center">
-  <img src="assets/screenshots/about.jpeg" width="45%" alt="About Page">
-  <img src="assets/screenshots/contact.jpeg" width="45%" alt="Contact Page">
+  <img src="./assets/Screenshots/About.jpeg" width="45%" alt="About Page">
+  <img src="./assets/Screenshots/contact.jpeg" width="45%" alt="Contact Page">
 </p>
 
 ### 🏠 Home Page
 
-![Home Page](assets/screenshots/home.jpeg)
+![Home Page](./assets/screenshots/home.jpeg)
 
 ---
 
 ### 🔐 Login Page
 
-![Login Page](assets/screenshots/login.jpeg)
+![Login Page](./assets/screenshots/login.jpeg)
 
 ---
 
 ### 🌍 Destinations Page
 
-![Destinations Page](assets/screenshots/destination.jpeg)
+![Destinations Page](./assets/screenshots/destination.jpeg)
 
 ### 🚀 Trip Planing Page
 
-![Trip Planing Page](assets/screenshots/trip.jpeg)
+![Trip Planing Page](./assets/screenshots/trip.jpeg)
 
 ### 🚀 About Page
 
-![About Page](assets/screenshots/about.jpeg)
+![About Page](./assets/screenshots/about.jpeg)
 
 ### 👩‍💻 Contact Page
 
-![Contact Page](assets/screenshots/contact.jpeg)
+![Contact Page](./assets/screenshots/contact.jpeg)
 
 ## 🚀 Future Enhancements
 
