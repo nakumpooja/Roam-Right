@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RoamRight – Explore the World</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-logo" onclick="location.href = 'index.html'">
+        Roam<span>Right</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="destinations.html">Destinations</a></li>
+        <li><a href="trips.html">Plan Trip</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <!-- <a href="login.html" class="btn-outline">Login</a> -->
+        <a href="signup.html" class="btn-primary">Logout</a>
+      </div>
+      <div class="hamburger" onclick="toggleMenu()">&#9776;</div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg">
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-content">
+        <p class="hero-tag">✦ Your World Awaits</p>
+        <h1 class="hero-title">Discover Your<br /><em>Next Adventure</em></h1>
+        <p class="hero-sub">
+          From sun-kissed beaches to ancient mountain trails — plan your perfect
+          journey in minutes.
+        </p>
+
+        <!-- SEARCH BAR -->
+        <div class="search-bar">
+          <div class="search-group">
+            <span class="search-icon">🔍</span>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Where do you want to go?"
+              onkeydown="handleSearch(event)"
+            />
+          </div>
+          <div class="search-group">
+            <span class="search-icon">📅</span>
+            <input type="date" id="searchDate" />
+          </div>
+          <div class="search-group">
+            <span class="search-icon">👥</span>
+            <select id="searchGuests">
+              <option>1 Guest</option>
+              <option>2 Guests</option>
+              <option>3 Guests</option>
+              <option>4+ Guests</option>
+            </select>
+          </div>
+          <button class="btn-search" onclick="searchDestination()">
+            Explore Now
+          </button>
+        </div>
+
+        <div class="hero-tags">
+          <span onclick="quickSearch('Beach')">🏖️ Beach</span>
+          <span onclick="quickSearch('Mountains')">🏔️ Mountains</span>
+          <span onclick="quickSearch('Culture')">🏛️ Culture</span>
+          <span onclick="quickSearch('Adventure')">🧗 Adventure</span>
+        </div>
+      </div>
+      <div class="hero-scroll" onclick="scrollToSection('categories')">
+        ↓ Scroll to Explore
+      </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <section class="stats-bar">
+      <div class="stat">
+        <h3>120+</h3>
+        <p>Destinations</p>
+      </div>
+      <div class="stat">
+        <h3>50K+</h3>
+        <p>Happy Travelers</p>
+      </div>
+      <div class="stat">
+        <h3>4.9★</h3>
+        <p>Average Rating</p>
+      </div>
+      <div class="stat">
+        <h3>24/7</h3>
+        <p>Support</p>
+      </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="section" id="categories">
+      <div class="section-header">
+        <p class="section-tag">Browse By Type</p>
+        <h2>Travel Your Way</h2>
+        <p class="section-sub">
+          Find the kind of trip that speaks to your soul.
+        </p>
+      </div>
+      <div class="categories-grid">
+        <div
+          class="cat-card"
+          onclick="filterDestination('Beach')"
+          style="
+            background-image: url(&quot;https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&quot;);
+          "
+        >
+          <div class="cat-overlay"></div>
+          <div class="cat-content">
+            <span>🏖️</span>
+            <h3>Beach Escapes</h3>
+          </div>
+        </div>
+        <div
+          class="cat-card"
+          onclick="filterDestination('Mountain')"
+          style="
+            background-image: url(&quot;https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&quot;);
+          "
+        >
+          <div class="cat-overlay"></div>
+          <div class="cat-content">
+            <span>🏔️</span>
+            <h3>Mountain Trails</h3>
+          </div>
+        </div>
+        <div
+          class="cat-card"
+          onclick="filterDestination('Culture')"
+          style="
+            background-image: url(&quot;https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&quot;);
+          "
+        >
+          <div class="cat-overlay"></div>
+          <div class="cat-content">
+            <span>🏛️</span>
+            <h3>Cultural Gems</h3>
+          </div>
+        </div>
+        <div
+          class="cat-card"
+          onclick="filterDestination('Adventure')"
+          style="
+            background-image: url(&quot;https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=600&quot;);
+          "
+        >
+          <div class="cat-overlay"></div>
+          <div class="cat-content">
+            <span>🧗</span>
+            <h3>Adventures</h3>
+          </div>
+        </div>
+        <div
+          class="cat-card"
+          onclick="filterDestination('City')"
+          style="
+            background-image: url(&quot;https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&quot;);
+          "
+        >
+          <div class="cat-overlay"></div>
+          <div class="cat-content">
+            <span>🌆</span>
+            <h3>City Breaks</h3>
+          </div>
+        </div>
+        <div
+          class="cat-card"
+          onclick="filterDestination('Wildlife')"
+          style="
+            background-image: url(&quot;https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=600&quot;);
+          "
+        >
+          <div class="cat-overlay"></div>
+          <div class="cat-content">
+            <span>🦁</span>
+            <h3>Wildlife & Nature</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- POPULAR DESTINATIONS -->
+    <section class="section bg-light" id="popular">
+      <div class="section-header">
+        <p class="section-tag">Top Picks</p>
+        <h2>Popular Destinations</h2>
+        <p class="section-sub">Loved by thousands of travelers worldwide.</p>
+      </div>
+      <div class="destinations-grid">
+        <div class="dest-card">
+          <div
+            class="dest-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&quot;);
+            "
+          >
+            <span class="dest-badge">Trending</span>
+            <button class="dest-fav" onclick="toggleFav(this)">♡</button>
+          </div>
+          <div class="dest-info">
+            <div class="dest-top">
+              <h3>Manali, India</h3>
+              <span>⭐ 4.8</span>
+            </div>
+            <p>
+              Snow-capped peaks and serene valleys in the heart of the
+              Himalayas.
+            </p>
+            <div class="dest-footer">
+              <span class="dest-price">From ₹12,999</span>
+              <a href="destinations.html" class="btn-sm">View</a>
+            </div>
+          </div>
+        </div>
+        <div class="dest-card">
+          <div
+            class="dest-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&quot;);
+            "
+          >
+            <span class="dest-badge">Popular</span>
+            <button class="dest-fav" onclick="toggleFav(this)">♡</button>
+          </div>
+          <div class="dest-info">
+            <div class="dest-top">
+              <h3>Bali, Indonesia</h3>
+              <span>⭐ 4.9</span>
+            </div>
+            <p>
+              Tropical paradise with lush rice terraces and vibrant culture.
+            </p>
+            <div class="dest-footer">
+              <span class="dest-price">From ₹45,000</span>
+              <a href="destinations.html" class="btn-sm">View</a>
+            </div>
+          </div>
+        </div>
+        <div class="dest-card">
+          <div
+            class="dest-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1555993539-1732b0258235?w=600&quot;);
+            "
+          >
+            <span class="dest-badge">Must Visit</span>
+            <button class="dest-fav" onclick="toggleFav(this)">♡</button>
+          </div>
+          <div class="dest-info">
+            <div class="dest-top">
+              <h3>Santorini, Greece</h3>
+              <span>⭐ 4.9</span>
+            </div>
+            <p>
+              Iconic whitewashed architecture overlooking the sparkling Aegean
+              Sea.
+            </p>
+            <div class="dest-footer">
+              <span class="dest-price">From ₹85,000</span>
+              <a href="destinations.html" class="btn-sm">View</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 2.5rem">
+        <a href="destinations.html" class="btn-primary"
+          >View All Destinations</a
+        >
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="how">
+      <div class="section-header">
+        <p class="section-tag">Simple Steps</p>
+        <h2>How RoamRight Works</h2>
+        <p class="section-sub">
+          Plan your dream trip in just three easy steps.
+        </p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-icon">🔍</div>
+          <h3>Search Destinations</h3>
+          <p>
+            Use our smart search to find the perfect destination based on your
+            interests and budget.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-icon">📋</div>
+          <h3>Plan Your Itinerary</h3>
+          <p>
+            Customize your trip day-by-day with our easy-to-use trip planner and
+            activity picker.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-icon">✈️</div>
+          <h3>Pack & Go!</h3>
+          <p>
+            Confirm your booking and get ready for an unforgettable adventure
+            around the world.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="section bg-dark" id="testimonials">
+      <div class="section-header">
+        <p class="section-tag" style="color: #f0c060">What Travelers Say</p>
+        <h2 style="color: #fff">Real Stories, Real Journeys</h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <p>
+            "RoamRight made planning our Bali honeymoon so effortless. The
+            interface is stunning and the itinerary tool saved us hours!"
+          </p>
+          <div class="testi-author">
+            <div class="testi-avatar">P</div>
+            <div><strong>Priya Mehta</strong><span>Mumbai, India</span></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <p>
+            "I discovered destinations I had never even considered before. The
+            category browsing is super intuitive and inspiring."
+          </p>
+          <div class="testi-author">
+            <div class="testi-avatar">R</div>
+            <div>
+              <strong>Rohan Shah</strong><span>Ahmedabad, Gujarat</span>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <p>
+            "Booked my Manali trip in under 10 minutes. Clean design, great
+            filters, and amazing support team!"
+          </p>
+          <div class="testi-author">
+            <div class="testi-avatar">A</div>
+            <div><strong>Anika Patel</strong><span>Surat, Gujarat</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter-section">
+      <div class="newsletter-content">
+        <h2>Get Travel Deals First</h2>
+        <p>
+          Subscribe and receive exclusive offers, destination guides, and travel
+          inspiration straight to your inbox.
+        </p>
+        <div class="newsletter-form">
+          <input
+            type="email"
+            id="newsletterEmail"
+            placeholder="Enter your email address..."
+          />
+          <button onclick="subscribeNewsletter()">Subscribe</button>
+        </div>
+        <p class="newsletter-note" id="newsletterMsg"></p>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h2>Roam<span>Right</span></h2>
+          <p>
+            Your trusted companion for planning unforgettable travel experiences
+            across the globe.
+          </p>
+        </div>
+        <div class="footer-links">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="destinations.html">Destinations</a></li>
+            <li><a href="trips.html">Plan a Trip</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Account</h4>
+          <ul>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="signup.html">Sign Up</a></li>
+            <li><a href="#">My Trips</a></li>
+            <li><a href="#">Wishlist</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Follow Us</h4>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Twitter / X</a></li>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">YouTube</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          © 2025 RoamRight. All rights reserved. | Designed in Gujarat, India.
+        </p>
+      </div>
+    </footer>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

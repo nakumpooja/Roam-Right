@@ -1,0 +1,2927 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plan a Trip – RoamRight</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ---- ITINERARY SHOWCASE STYLES ---- */
+      .itinerary-hero-strip {
+        background: var(--primary);
+        padding: 2rem 7%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .itinerary-hero-strip h3 {
+        font-family: var(--font-display);
+        color: white;
+        font-size: 1.3rem;
+      }
+      .itinerary-hero-strip p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.88rem;
+      }
+      .coming-pill {
+        background: rgba(240, 192, 96, 0.15);
+        border: 1.5px solid #f0c060;
+        color: #f0c060;
+        padding: 0.45rem 1.2rem;
+        border-radius: 50px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        white-space: nowrap;
+      }
+
+      /* ---- TABS ---- */
+      .itinerary-tabs {
+        display: flex;
+        gap: 0;
+        border-bottom: 2px solid var(--border);
+        overflow-x: auto;
+        padding: 0 7%;
+        background: white;
+        position: sticky;
+        top: 64px;
+        z-index: 10;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      }
+      .itab {
+        padding: 1rem 1.5rem;
+        border: none;
+        background: none;
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        color: var(--text-light);
+        cursor: pointer;
+        white-space: nowrap;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -2px;
+        transition: all var(--transition);
+      }
+      .itab:hover {
+        color: var(--text);
+      }
+      .itab.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+        font-weight: 500;
+      }
+
+      /* ---- SAMPLE ITINERARY LAYOUT ---- */
+      .sample-layout {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 2.5rem;
+        align-items: flex-start;
+      }
+
+      /* ---- TRIP HEADER CARD ---- */
+      .trip-header-card {
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        margin-bottom: 2rem;
+      }
+      .trip-header-img {
+        height: 240px;
+        background: url("https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=900")
+          center/cover no-repeat;
+        position: relative;
+      }
+      .trip-header-img-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.7) 0%,
+          transparent 60%
+        );
+      }
+      .trip-header-img-text {
+        position: absolute;
+        bottom: 1.4rem;
+        left: 1.6rem;
+      }
+      .trip-header-img-text h2 {
+        font-family: var(--font-display);
+        color: white;
+        font-size: 1.9rem;
+      }
+      .trip-header-img-text p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+      }
+      .trip-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1.4rem 1.6rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .trip-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.86rem;
+        color: var(--text-light);
+      }
+      .trip-meta-item strong {
+        color: var(--text);
+      }
+      .trip-tags-row {
+        padding: 1rem 1.6rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .trip-interest-tag {
+        background: var(--bg-light);
+        color: var(--text);
+        font-size: 0.78rem;
+        padding: 0.28rem 0.8rem;
+        border-radius: 50px;
+        border: 1px solid var(--border);
+      }
+
+      /* ---- DAY CARDS ---- */
+      .day-panel {
+        display: none;
+      }
+      .day-panel.active {
+        display: block;
+      }
+
+      .day-card {
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+      }
+      .day-card-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .day-num-badge {
+        min-width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: var(--primary);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .day-num-badge span:first-child {
+        font-size: 0.6rem;
+        opacity: 0.7;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .day-num-badge span:last-child {
+        font-size: 1.3rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+      .day-card-header h3 {
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+      }
+      .day-card-header p {
+        font-size: 0.85rem;
+        color: var(--text-light);
+      }
+
+      .activity-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+      }
+      .activity-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 0.85rem 1rem;
+        border-radius: var(--radius-sm);
+        background: var(--bg-light);
+        border: 1px solid var(--border);
+        transition: box-shadow var(--transition);
+      }
+      .activity-row:hover {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      }
+      .activity-time {
+        min-width: 60px;
+        font-size: 0.75rem;
+        color: var(--accent);
+        font-weight: 600;
+        padding-top: 0.12rem;
+      }
+      .activity-icon {
+        font-size: 1.2rem;
+        margin-top: 0.05rem;
+      }
+      .activity-body h4 {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text);
+      }
+      .activity-body p {
+        font-size: 0.8rem;
+        color: var(--text-light);
+        margin-top: 0.15rem;
+      }
+      .activity-tag {
+        margin-left: auto;
+        align-self: flex-start;
+        background: white;
+        border: 1px solid var(--border);
+        font-size: 0.72rem;
+        color: var(--text-light);
+        padding: 0.2rem 0.65rem;
+        border-radius: 50px;
+        white-space: nowrap;
+      }
+
+      /* ---- SIDEBAR ---- */
+      .itinerary-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .sidebar-card {
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 1.5rem;
+      }
+      .sidebar-card h4 {
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        margin-bottom: 1rem;
+        color: var(--primary);
+      }
+      .budget-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.86rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .budget-row:last-child {
+        border-bottom: none;
+        font-weight: 600;
+        color: var(--primary);
+      }
+      .budget-row span:last-child {
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .budget-row.total span:last-child {
+        font-size: 1rem;
+        font-weight: 700;
+      }
+
+      .packing-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.84rem;
+        padding: 0.35rem 0;
+        color: var(--text-light);
+      }
+      .packing-item::before {
+        content: "✓";
+        color: var(--accent);
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .weather-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+      }
+      .weather-item {
+        background: var(--bg-light);
+        border-radius: var(--radius-sm);
+        padding: 0.7rem;
+        text-align: center;
+        border: 1px solid var(--border);
+      }
+      .weather-item .wi-icon {
+        font-size: 1.5rem;
+      }
+      .weather-item .wi-label {
+        font-size: 0.72rem;
+        color: var(--text-light);
+        margin-top: 0.15rem;
+      }
+      .weather-item .wi-val {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .tip-item {
+        display: flex;
+        gap: 0.7rem;
+        font-size: 0.84rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-light);
+        line-height: 1.5;
+      }
+      .tip-item:last-child {
+        border-bottom: none;
+      }
+      .tip-item .tip-icon {
+        flex-shrink: 0;
+        font-size: 1rem;
+      }
+
+      /* ---- NAV PANEL BUTTONS ---- */
+      .day-nav-btns {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+      .day-nav-btn {
+        padding: 0.45rem 1rem;
+        border-radius: 50px;
+        border: 1.5px solid var(--border);
+        background: white;
+        font-size: 0.82rem;
+        cursor: pointer;
+        font-family: var(--font-body);
+        transition: all var(--transition);
+      }
+      .day-nav-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+      .day-nav-btn:hover:not(.active) {
+        border-color: var(--primary);
+      }
+
+      /* ---- OTHER TRIPS SECTION ---- */
+      .other-trips-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+      }
+      .other-trip-card {
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        background: white;
+      }
+      .other-trip-img {
+        height: 160px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+      }
+      .other-trip-img-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.55) 0%,
+          transparent 60%
+        );
+      }
+      .other-trip-img-label {
+        position: absolute;
+        bottom: 0.8rem;
+        left: 0.8rem;
+        color: white;
+        font-family: var(--font-display);
+        font-size: 1rem;
+      }
+      .other-trip-body {
+        padding: 1rem;
+      }
+      .other-trip-body p {
+        font-size: 0.82rem;
+        color: var(--text-light);
+        margin-bottom: 0.5rem;
+      }
+      .other-trip-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+      }
+      .other-trip-meta span {
+        color: var(--text-light);
+      }
+      .other-trip-meta strong {
+        color: var(--accent);
+      }
+
+      /* ---- COMING SOON OVERLAY ON FORM ---- */
+      .coming-soon-card {
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 3rem 2rem;
+        text-align: center;
+      }
+      .coming-soon-card .cs-icon {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+      }
+      .coming-soon-card h3 {
+        font-family: var(--font-display);
+        font-size: 1.6rem;
+        margin-bottom: 0.75rem;
+        color: var(--primary);
+      }
+      .coming-soon-card p {
+        color: var(--text-light);
+        font-size: 0.92rem;
+        max-width: 360px;
+        margin: 0 auto 2rem;
+      }
+      .notify-form {
+        display: flex;
+        gap: 0.5rem;
+        max-width: 340px;
+        margin: 0 auto;
+      }
+      .notify-form input {
+        flex: 1;
+        padding: 0.65rem 1rem;
+        border-radius: 50px;
+        border: 1.5px solid var(--border);
+        font-family: var(--font-body);
+        font-size: 0.88rem;
+        outline: none;
+      }
+      .notify-form input:focus {
+        border-color: var(--accent);
+      }
+      .coming-features {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        margin-top: 2rem;
+        text-align: left;
+      }
+      .cf-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.86rem;
+        color: var(--text-light);
+      }
+      .cf-item span:first-child {
+        font-size: 1.1rem;
+      }
+
+      @media (max-width: 1100px) {
+        .sample-layout {
+          grid-template-columns: 1fr;
+        }
+        .other-trips-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 640px) {
+        .other-trips-grid {
+          grid-template-columns: 1fr;
+        }
+        .trip-meta {
+          flex-direction: column;
+          gap: 0.6rem;
+        }
+        .itinerary-tabs {
+          padding: 0 4%;
+        }
+        .notify-form {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar scrolled" id="navbar">
+      <div class="nav-logo" onclick="location.href = 'index.html'">
+        Roam<span>Right</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="destinations.html">Destinations</a></li>
+        <li><a href="trips.html" class="active">Plan Trip</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <!--- <div class="nav-actions">
+        <a href="login.html" class="btn-outline">Login</a>
+        <a href="signup.html" class="btn-primary">Sign Up</a>
+      </div>-->
+      <div class="hamburger" onclick="toggleMenu()">&#9776;</div>
+    </nav>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero short" style="margin-top: 0">
+      <div class="page-hero-overlay"></div>
+      <div class="page-hero-content">
+        <p class="hero-tag">✦ Sample Itineraries</p>
+        <h1>Trip Planner</h1>
+        <p>
+          Browse our hand-crafted itineraries — custom trip building coming
+          soon.
+        </p>
+      </div>
+    </section>
+
+    <!-- HERO STRIP -->
+    <div class="itinerary-hero-strip">
+      <div>
+        <h3>Sample Itineraries</h3>
+        <p>
+          Explore our pre-built day-by-day plans to inspire your next adventure.
+        </p>
+      </div>
+      <span class="coming-pill">⚡ Custom Planner — Coming Soon</span>
+    </div>
+
+    <!-- TABS -->
+    <div class="itinerary-tabs" id="itineraryTabsBar">
+      <button class="itab active" onclick="switchTrip('bali', this)">
+        🏖️ Bali, Indonesia
+      </button>
+      <button class="itab" onclick="switchTrip('manali', this)">
+        🏔️ Manali, India
+      </button>
+      <button class="itab" onclick="switchTrip('rajasthan', this)">
+        🏛️ Rajasthan, India
+      </button>
+      <button class="itab" onclick="switchTrip('paris', this)">
+        🗼 Paris, France
+      </button>
+      <button class="itab" onclick="switchTrip('tokyo', this)">
+        🌸 Tokyo, Japan
+      </button>
+    </div>
+
+    <!-- MAIN SECTION -->
+    <section class="section">
+      <div class="sample-layout">
+        <!-- LEFT: ITINERARY CONTENT -->
+        <div>
+          <!-- ===== BALI ===== -->
+          <div class="day-panel active" id="trip-bali">
+            <div class="trip-header-card">
+              <div
+                class="trip-header-img"
+                style="
+                  background-image: url(&quot;https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=900&quot;);
+                "
+              >
+                <div class="trip-header-img-overlay"></div>
+                <div class="trip-header-img-text">
+                  <h2>Bali, Indonesia</h2>
+                  <p>7 Days · 2 Adults · Mid-Range</p>
+                </div>
+              </div>
+              <div class="trip-meta">
+                <div class="trip-meta-item">📅 <strong>7 Days</strong></div>
+                <div class="trip-meta-item">👥 <strong>2 Adults</strong></div>
+                <div class="trip-meta-item">
+                  💰 <strong>₹45,000 – ₹55,000</strong>
+                </div>
+                <div class="trip-meta-item">
+                  ✈️ <strong>From Ahmedabad</strong>
+                </div>
+                <div class="trip-meta-item">
+                  🏨 <strong>Resort / Villa</strong>
+                </div>
+              </div>
+              <div class="trip-tags-row">
+                <span class="trip-interest-tag">🏖️ Beach</span>
+                <span class="trip-interest-tag">🏛️ Temples</span>
+                <span class="trip-interest-tag">🍜 Food</span>
+                <span class="trip-interest-tag">🎨 Art</span>
+                <span class="trip-interest-tag">🛍️ Shopping</span>
+              </div>
+            </div>
+
+            <!-- Day Nav -->
+            <div class="day-nav-btns">
+              <button
+                class="day-nav-btn active"
+                onclick="switchDay('bali', 1, this)"
+              >
+                Day 1
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('bali', 2, this)">
+                Day 2
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('bali', 3, this)">
+                Day 3
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('bali', 4, this)">
+                Day 4
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('bali', 5, this)">
+                Day 5
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('bali', 6, this)">
+                Day 6
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('bali', 7, this)">
+                Day 7
+              </button>
+            </div>
+
+            <div id="bali-day-1" class="day-card">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>1</span></div>
+                <div>
+                  <h3>Arrival & Kuta Beach</h3>
+                  <p>
+                    Touch down in paradise — settle in and soak up your first
+                    Bali sunset.
+                  </p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">10:00 AM</span
+                  ><span class="activity-icon">🛬</span>
+                  <div class="activity-body">
+                    <h4>Arrive at Ngurah Rai International Airport</h4>
+                    <p>
+                      Complete immigration, collect luggage and meet your
+                      transfer driver.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Arrival</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">12:30 PM</span
+                  ><span class="activity-icon">🏨</span>
+                  <div class="activity-body">
+                    <h4>Check-in at Villa / Resort</h4>
+                    <p>
+                      Freshen up and explore your accommodation in Seminyak or
+                      Kuta area.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Hotel</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">02:30 PM</span
+                  ><span class="activity-icon">🏖️</span>
+                  <div class="activity-body">
+                    <h4>Kuta Beach Walk</h4>
+                    <p>
+                      Stroll along the famous Kuta beach strip, dip your feet in
+                      the Indian Ocean.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Beach</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">05:00 PM</span
+                  ><span class="activity-icon">🌅</span>
+                  <div class="activity-body">
+                    <h4>Sunset at Tanah Lot Temple</h4>
+                    <p>
+                      Watch the legendary sunset from the oceanside sea temple —
+                      a must-see.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Culture</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">08:00 PM</span
+                  ><span class="activity-icon">🍽️</span>
+                  <div class="activity-body">
+                    <h4>Welcome Dinner at Jimbaran Bay</h4>
+                    <p>
+                      Fresh grilled seafood on the beach under the stars — a
+                      Bali classic.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Dining</span>
+                </div>
+              </div>
+            </div>
+            <div id="bali-day-2" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>2</span></div>
+                <div>
+                  <h3>Ubud & Rice Terraces</h3>
+                  <p>
+                    Explore Bali's cultural heart — art, monkeys, and stunning
+                    landscapes.
+                  </p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">07:00 AM</span
+                  ><span class="activity-icon">🌅</span>
+                  <div class="activity-body">
+                    <h4>Sunrise at Tegallalang Rice Terraces</h4>
+                    <p>
+                      UNESCO-listed emerald-green rice paddies — breathtaking in
+                      the early light.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Nature</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">09:30 AM</span
+                  ><span class="activity-icon">🐒</span>
+                  <div class="activity-body">
+                    <h4>Sacred Monkey Forest Sanctuary</h4>
+                    <p>
+                      Walk through ancient temples among hundreds of playful
+                      Balinese macaques.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Wildlife</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">12:00 PM</span
+                  ><span class="activity-icon">🍜</span>
+                  <div class="activity-body">
+                    <h4>Lunch at Ubud Market Food Stalls</h4>
+                    <p>
+                      Try authentic Nasi Goreng, Satay, and fresh tropical fruit
+                      juices.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Food</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">02:00 PM</span
+                  ><span class="activity-icon">🎨</span>
+                  <div class="activity-body">
+                    <h4>Ubud Art Market & Galleries</h4>
+                    <p>
+                      Browse handmade batik, woodcarvings, silver jewellery, and
+                      Balinese art.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Shopping</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">06:00 PM</span
+                  ><span class="activity-icon">🎭</span>
+                  <div class="activity-body">
+                    <h4>Kecak Fire Dance at Uluwatu</h4>
+                    <p>
+                      The dramatic cliffside sunset Kecak dance performance — an
+                      unforgettable spectacle.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Culture</span>
+                </div>
+              </div>
+            </div>
+            <div id="bali-day-3" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>3</span></div>
+                <div>
+                  <h3>Water Temples & Spa</h3>
+                  <p>
+                    Spiritual cleansing, wellness, and the legendary Tirta
+                    Empul.
+                  </p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">08:00 AM</span
+                  ><span class="activity-icon">🛕</span>
+                  <div class="activity-body">
+                    <h4>Tirta Empul Water Temple</h4>
+                    <p>
+                      Sacred spring temple where locals and visitors perform
+                      purification rituals.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Spiritual</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">11:00 AM</span
+                  ><span class="activity-icon">🧘</span>
+                  <div class="activity-body">
+                    <h4>Balinese Yoga & Meditation</h4>
+                    <p>
+                      Join a sunrise yoga session in the jungle with experienced
+                      local instructors.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Wellness</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">01:30 PM</span
+                  ><span class="activity-icon">🍃</span>
+                  <div class="activity-body">
+                    <h4>Traditional Balinese Spa</h4>
+                    <p>
+                      A 2-hour massage, body scrub, and flower bath — pure
+                      relaxation.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Spa</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">06:00 PM</span
+                  ><span class="activity-icon">🌙</span>
+                  <div class="activity-body">
+                    <h4>Evening in Seminyak</h4>
+                    <p>
+                      Browse Seminyak's boutiques and enjoy dinner at a rooftop
+                      restaurant.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Leisure</span>
+                </div>
+              </div>
+            </div>
+            <div id="bali-day-4" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>4</span></div>
+                <div>
+                  <h3>Mount Batur Sunrise Trek</h3>
+                  <p>
+                    Conquer an active volcano before dawn — the view is worth
+                    every step.
+                  </p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">02:00 AM</span
+                  ><span class="activity-icon">🔦</span>
+                  <div class="activity-body">
+                    <h4>Depart for Mount Batur</h4>
+                    <p>
+                      Early morning drive to the volcano base with your trekking
+                      guide.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Transfer</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">04:00 AM</span
+                  ><span class="activity-icon">🏔️</span>
+                  <div class="activity-body">
+                    <h4>Begin Sunrise Trek</h4>
+                    <p>
+                      A 2-hour guided climb up the active volcano through jungle
+                      trails.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Adventure</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">06:00 AM</span
+                  ><span class="activity-icon">🌅</span>
+                  <div class="activity-body">
+                    <h4>Sunrise at the Summit (1,717m)</h4>
+                    <p>
+                      Watch the sun rise over Lake Batur and the surrounding
+                      caldera.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Nature</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">10:00 AM</span
+                  ><span class="activity-icon">☕</span>
+                  <div class="activity-body">
+                    <h4>Coffee Plantation Visit</h4>
+                    <p>
+                      Tour a Kopi Luwak coffee farm and sample world-famous
+                      Balinese coffee.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Experience</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">04:00 PM</span
+                  ><span class="activity-icon">😴</span>
+                  <div class="activity-body">
+                    <h4>Rest & Recovery at the Hotel</h4>
+                    <p>
+                      Well-deserved afternoon rest after the early morning
+                      volcano hike.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Rest</span>
+                </div>
+              </div>
+            </div>
+            <div id="bali-day-5" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>5</span></div>
+                <div>
+                  <h3>Nusa Penida Island</h3>
+                  <p>
+                    Day trip to Bali's most dramatic island — cliffs, crystal
+                    bays, and manta rays.
+                  </p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">07:00 AM</span
+                  ><span class="activity-icon">⛵</span>
+                  <div class="activity-body">
+                    <h4>Speed Boat to Nusa Penida</h4>
+                    <p>
+                      45-minute fast boat ride from Sanur beach to Nusa Penida.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Transfer</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">09:00 AM</span
+                  ><span class="activity-icon">🦈</span>
+                  <div class="activity-body">
+                    <h4>Snorkeling with Manta Rays</h4>
+                    <p>
+                      Swim alongside majestic manta rays at Manta Point — a
+                      once-in-a-lifetime experience.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Adventure</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">12:00 PM</span
+                  ><span class="activity-icon">🏖️</span>
+                  <div class="activity-body">
+                    <h4>Kelingking Beach (T-Rex Cliff)</h4>
+                    <p>
+                      The iconic dinosaur-shaped clifftop viewpoint — Bali's
+                      most photographed spot.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Scenic</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">03:00 PM</span
+                  ><span class="activity-icon">💎</span>
+                  <div class="activity-body">
+                    <h4>Crystal Bay Swim</h4>
+                    <p>
+                      Crystal clear turquoise water surrounded by lush green
+                      hills.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Beach</span>
+                </div>
+              </div>
+            </div>
+            <div id="bali-day-6" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>6</span></div>
+                <div>
+                  <h3>Cooking Class & Free Time</h3>
+                  <p>
+                    Learn Balinese cooking, then spend your last full day as you
+                    please.
+                  </p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">09:00 AM</span
+                  ><span class="activity-icon">🧑‍🍳</span>
+                  <div class="activity-body">
+                    <h4>Traditional Balinese Cooking Class</h4>
+                    <p>
+                      Visit a local market, then cook 4 traditional dishes with
+                      a chef at a family compound.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Food</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">01:00 PM</span
+                  ><span class="activity-icon">🛍️</span>
+                  <div class="activity-body">
+                    <h4>Seminyak Shopping & Souvenirs</h4>
+                    <p>
+                      Pick up last-minute gifts — sarongs, silver jewellery,
+                      Balinese paintings, and spices.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Shopping</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">06:00 PM</span
+                  ><span class="activity-icon">🍹</span>
+                  <div class="activity-body">
+                    <h4>Farewell Sunset Cocktails</h4>
+                    <p>
+                      Watch your last Bali sunset from a famous cliffside beach
+                      club.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Leisure</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">08:00 PM</span
+                  ><span class="activity-icon">🎶</span>
+                  <div class="activity-body">
+                    <h4>Farewell Dinner at La Lucciola</h4>
+                    <p>
+                      Romantic beachside dinner to celebrate your Bali
+                      adventure.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Dining</span>
+                </div>
+              </div>
+            </div>
+            <div id="bali-day-7" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>7</span></div>
+                <div>
+                  <h3>Departure Day</h3>
+                  <p>
+                    One last morning in paradise before heading home with
+                    memories for life.
+                  </p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">08:00 AM</span
+                  ><span class="activity-icon">🍳</span>
+                  <div class="activity-body">
+                    <h4>Breakfast at the Hotel</h4>
+                    <p>
+                      Enjoy your final Balinese breakfast — fresh fruits, local
+                      pastries and coffee.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Meal</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">10:00 AM</span
+                  ><span class="activity-icon">🏊</span>
+                  <div class="activity-body">
+                    <h4>Last Pool Swim / Hotel Leisure</h4>
+                    <p>
+                      Relax by the pool one last time before the journey home.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Leisure</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">12:00 PM</span
+                  ><span class="activity-icon">🧳</span>
+                  <div class="activity-body">
+                    <h4>Check-out & Transfer to Airport</h4>
+                    <p>
+                      Say goodbye to Bali and head to Ngurah Rai Airport for
+                      departure.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Departure</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== MANALI ===== -->
+          <div class="day-panel" id="trip-manali">
+            <div class="trip-header-card">
+              <div
+                class="trip-header-img"
+                style="
+                  background-image: url(&quot;https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&quot;);
+                "
+              >
+                <div class="trip-header-img-overlay"></div>
+                <div class="trip-header-img-text">
+                  <h2>Manali, India</h2>
+                  <p>5 Days · 2 Adults · Budget Friendly</p>
+                </div>
+              </div>
+              <div class="trip-meta">
+                <div class="trip-meta-item">📅 <strong>5 Days</strong></div>
+                <div class="trip-meta-item">👥 <strong>2 Adults</strong></div>
+                <div class="trip-meta-item">
+                  💰 <strong>₹12,999 – ₹18,000</strong>
+                </div>
+                <div class="trip-meta-item">
+                  🚌 <strong>From Delhi / Chandigarh</strong>
+                </div>
+              </div>
+              <div class="trip-tags-row">
+                <span class="trip-interest-tag">🏔️ Mountains</span>
+                <span class="trip-interest-tag">🧗 Adventure</span>
+                <span class="trip-interest-tag">🌨️ Snow</span>
+                <span class="trip-interest-tag">🍜 Local Food</span>
+              </div>
+            </div>
+            <div class="day-nav-btns">
+              <button
+                class="day-nav-btn active"
+                onclick="switchDay('manali', 1, this)"
+              >
+                Day 1
+              </button>
+              <button
+                class="day-nav-btn"
+                onclick="switchDay('manali', 2, this)"
+              >
+                Day 2
+              </button>
+              <button
+                class="day-nav-btn"
+                onclick="switchDay('manali', 3, this)"
+              >
+                Day 3
+              </button>
+              <button
+                class="day-nav-btn"
+                onclick="switchDay('manali', 4, this)"
+              >
+                Day 4
+              </button>
+              <button
+                class="day-nav-btn"
+                onclick="switchDay('manali', 5, this)"
+              >
+                Day 5
+              </button>
+            </div>
+            <div id="manali-day-1" class="day-card">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>1</span></div>
+                <div>
+                  <h3>Arrival in Manali</h3>
+                  <p>Settle in and explore the charming Mall Road.</p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">11:00 AM</span
+                  ><span class="activity-icon">🛬</span>
+                  <div class="activity-body">
+                    <h4>Arrive & Check-in to Hotel</h4>
+                    <p>
+                      Rest after the overnight bus or flight journey from Delhi.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Arrival</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">02:00 PM</span
+                  ><span class="activity-icon">🛍️</span>
+                  <div class="activity-body">
+                    <h4>Mall Road Stroll</h4>
+                    <p>
+                      Explore local shops, buy woolens, and try momos at the
+                      street stalls.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Leisure</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">05:00 PM</span
+                  ><span class="activity-icon">🛕</span>
+                  <div class="activity-body">
+                    <h4>Hadimba Devi Temple</h4>
+                    <p>
+                      Visit the ancient wooden temple nestled inside a deodar
+                      cedar forest.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Culture</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">08:00 PM</span
+                  ><span class="activity-icon">🍽️</span>
+                  <div class="activity-body">
+                    <h4>Dinner at Drifter's Café</h4>
+                    <p>
+                      Cosy café with views, local daal, and the famous Himachali
+                      trout.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Dining</span>
+                </div>
+              </div>
+            </div>
+            <div id="manali-day-2" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>2</span></div>
+                <div>
+                  <h3>Rohtang Pass</h3>
+                  <p>
+                    Snow-capped pass at 3,978m — one of India's most iconic
+                    drives.
+                  </p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">06:30 AM</span
+                  ><span class="activity-icon">🚌</span>
+                  <div class="activity-body">
+                    <h4>Early Departure for Rohtang Pass</h4>
+                    <p>
+                      Beat the traffic — early permits required. Book in
+                      advance.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Transfer</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">10:00 AM</span
+                  ><span class="activity-icon">❄️</span>
+                  <div class="activity-body">
+                    <h4>Snow Activities at Rohtang</h4>
+                    <p>
+                      Skiing, snow sledging, and snowball fights at 3,978m
+                      altitude.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Adventure</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">01:00 PM</span
+                  ><span class="activity-icon">🍜</span>
+                  <div class="activity-body">
+                    <h4>Dhaba Lunch on the Way Back</h4>
+                    <p>
+                      Hot rajma chawal and maggi at a roadside dhaba with
+                      mountain views.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Food</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">05:00 PM</span
+                  ><span class="activity-icon">🧘</span>
+                  <div class="activity-body">
+                    <h4>Solang Valley Sunset</h4>
+                    <p>
+                      Stop at Solang Valley on the way back for scenic evening
+                      views.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Scenic</span>
+                </div>
+              </div>
+            </div>
+            <div id="manali-day-3" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>3</span></div>
+                <div>
+                  <h3>River Rafting & Old Manali</h3>
+                  <p>
+                    Adrenaline on the Beas river, then explore the hippie Old
+                    Manali village.
+                  </p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">09:00 AM</span
+                  ><span class="activity-icon">🚣</span>
+                  <div class="activity-body">
+                    <h4>River Rafting on Beas River</h4>
+                    <p>
+                      Grade 2–3 white water rafting — thrilling and perfect for
+                      beginners.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Adventure</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">12:00 PM</span
+                  ><span class="activity-icon">🏘️</span>
+                  <div class="activity-body">
+                    <h4>Old Manali Village Walk</h4>
+                    <p>
+                      Wander through cobblestone lanes, cafés, and Manu Rishi
+                      temple.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Culture</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">04:00 PM</span
+                  ><span class="activity-icon">☕</span>
+                  <div class="activity-body">
+                    <h4>Café Culture in Old Manali</h4>
+                    <p>
+                      Try apple cider, banana pancakes, and great filter coffee
+                      at the backpacker cafés.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Leisure</span>
+                </div>
+              </div>
+            </div>
+            <div id="manali-day-4" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>4</span></div>
+                <div>
+                  <h3>Naggar Castle & Vashisht</h3>
+                  <p>
+                    Medieval castle, hot springs, and mountain village vibes.
+                  </p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">09:30 AM</span
+                  ><span class="activity-icon">🏰</span>
+                  <div class="activity-body">
+                    <h4>Naggar Castle</h4>
+                    <p>
+                      15th century stone and wood castle perched on a hilltop
+                      with sweeping valley views.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Heritage</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">12:30 PM</span
+                  ><span class="activity-icon">♨️</span>
+                  <div class="activity-body">
+                    <h4>Vashisht Hot Springs</h4>
+                    <p>
+                      Soak in the natural sulphur hot springs — a perfect remedy
+                      for sore legs.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Wellness</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">04:00 PM</span
+                  ><span class="activity-icon">🎨</span>
+                  <div class="activity-body">
+                    <h4>Nicholas Roerich Art Gallery</h4>
+                    <p>
+                      Browse the stunning Himalayan paintings by the legendary
+                      Russian artist.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Art</span>
+                </div>
+              </div>
+            </div>
+            <div id="manali-day-5" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>5</span></div>
+                <div>
+                  <h3>Departure Day</h3>
+                  <p>Final morning in the mountains before heading home.</p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">08:00 AM</span
+                  ><span class="activity-icon">🍳</span>
+                  <div class="activity-body">
+                    <h4>Last Breakfast in Manali</h4>
+                    <p>
+                      Aloo paratha with pickle and chai — the perfect Himachali
+                      send-off.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Meal</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">10:00 AM</span
+                  ><span class="activity-icon">🧳</span>
+                  <div class="activity-body">
+                    <h4>Check-out & Souvenir Shopping</h4>
+                    <p>
+                      Last-minute shopping for Kullu shawls, dry fruits, and
+                      apple products.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Shopping</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">12:00 PM</span
+                  ><span class="activity-icon">🚌</span>
+                  <div class="activity-body">
+                    <h4>Depart for Delhi / Chandigarh</h4>
+                    <p>Begin the scenic drive back through the Kullu valley.</p>
+                  </div>
+                  <span class="activity-tag">Departure</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== RAJASTHAN ===== -->
+          <div class="day-panel" id="trip-rajasthan">
+            <div class="trip-header-card">
+              <div
+                class="trip-header-img"
+                style="
+                  background-image: url(&quot;https://images.unsplash.com/photo-1548013146-72479768bada?w=900&quot;);
+                "
+              >
+                <div class="trip-header-img-overlay"></div>
+                <div class="trip-header-img-text">
+                  <h2>Rajasthan, India</h2>
+                  <p>6 Days · Heritage &amp; Culture Circuit</p>
+                </div>
+              </div>
+              <div class="trip-meta">
+                <div class="trip-meta-item">📅 <strong>6 Days</strong></div>
+                <div class="trip-meta-item">👥 <strong>2 Adults</strong></div>
+                <div class="trip-meta-item">
+                  💰 <strong>₹28,000 – ₹35,000</strong>
+                </div>
+                <div class="trip-meta-item">
+                  🚂 <strong>From Ahmedabad</strong>
+                </div>
+              </div>
+              <div class="trip-tags-row">
+                <span class="trip-interest-tag">🏰 Forts</span
+                ><span class="trip-interest-tag">🎨 Art</span
+                ><span class="trip-interest-tag">🐪 Desert</span
+                ><span class="trip-interest-tag">🍛 Food</span>
+              </div>
+            </div>
+            <div class="day-nav-btns">
+              <button
+                class="day-nav-btn active"
+                onclick="switchDay('rajasthan', 1, this)"
+              >
+                Day 1
+              </button>
+              <button
+                class="day-nav-btn"
+                onclick="switchDay('rajasthan', 2, this)"
+              >
+                Day 2
+              </button>
+              <button
+                class="day-nav-btn"
+                onclick="switchDay('rajasthan', 3, this)"
+              >
+                Day 3
+              </button>
+              <button
+                class="day-nav-btn"
+                onclick="switchDay('rajasthan', 4, this)"
+              >
+                Day 4
+              </button>
+              <button
+                class="day-nav-btn"
+                onclick="switchDay('rajasthan', 5, this)"
+              >
+                Day 5
+              </button>
+              <button
+                class="day-nav-btn"
+                onclick="switchDay('rajasthan', 6, this)"
+              >
+                Day 6
+              </button>
+            </div>
+            <div id="rajasthan-day-1" class="day-card">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>1</span></div>
+                <div>
+                  <h3>Arrival in Jaipur — The Pink City</h3>
+                  <p>Welcome to the royal city of maharajas.</p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">10:00 AM</span
+                  ><span class="activity-icon">🛬</span>
+                  <div class="activity-body">
+                    <h4>Arrive &amp; Check-in</h4>
+                    <p>
+                      Check into your haveli hotel in the old city for an
+                      authentic experience.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Arrival</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">02:00 PM</span
+                  ><span class="activity-icon">🏰</span>
+                  <div class="activity-body">
+                    <h4>Amber Fort</h4>
+                    <p>
+                      Imposing hill-top fort with intricate mirror-work palace
+                      interiors and elephant rides.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Heritage</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">06:00 PM</span
+                  ><span class="activity-icon">🌅</span>
+                  <div class="activity-body">
+                    <h4>Nahargarh Fort Sunset View</h4>
+                    <p>
+                      Sweeping panoramic view of the entire Pink City glowing at
+                      dusk.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Scenic</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">08:00 PM</span
+                  ><span class="activity-icon">🍛</span>
+                  <div class="activity-body">
+                    <h4>Dinner — Dal Baati Churma</h4>
+                    <p>
+                      Try Rajasthan's most iconic dish at a rooftop restaurant
+                      in the old city.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Dining</span>
+                </div>
+              </div>
+            </div>
+            <div id="rajasthan-day-2" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>2</span></div>
+                <div>
+                  <h3>Jaipur City Day</h3>
+                  <p>City Palace, Jantar Mantar, and the famous bazaars.</p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">09:00 AM</span
+                  ><span class="activity-icon">🏯</span>
+                  <div class="activity-body">
+                    <h4>City Palace Museum</h4>
+                    <p>
+                      Royal residence of the Jaipur royal family with armoury,
+                      art, and textiles.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Heritage</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">11:30 AM</span
+                  ><span class="activity-icon">🌡️</span>
+                  <div class="activity-body">
+                    <h4>Jantar Mantar Observatory</h4>
+                    <p>
+                      UNESCO World Heritage astronomical instruments from the
+                      18th century.
+                    </p>
+                  </div>
+                  <span class="activity-tag">History</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">02:00 PM</span
+                  ><span class="activity-icon">🛍️</span>
+                  <div class="activity-body">
+                    <h4>Johari Bazaar &amp; Bapu Bazaar</h4>
+                    <p>
+                      Shop for Jaipuri block-print textiles, blue pottery, gems,
+                      and bangles.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Shopping</span>
+                </div>
+              </div>
+            </div>
+            <div id="rajasthan-day-3" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>3</span></div>
+                <div><h3>Drive to Jodhpur — The Blue City</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">08:00 AM</span
+                  ><span class="activity-icon">🚌</span>
+                  <div class="activity-body">
+                    <h4>Drive Jaipur → Jodhpur</h4>
+                    <p>
+                      4.5-hour scenic drive through the Rajasthani countryside.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Transfer</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">01:30 PM</span
+                  ><span class="activity-icon">🏰</span>
+                  <div class="activity-body">
+                    <h4>Mehrangarh Fort</h4>
+                    <p>
+                      One of India's largest forts — towering above the electric
+                      blue city below.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Heritage</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">05:00 PM</span
+                  ><span class="activity-icon">🔵</span>
+                  <div class="activity-body">
+                    <h4>Old City Blue Neighbourhood Walk</h4>
+                    <p>
+                      Wander through narrow lanes of indigo-blue painted Brahmin
+                      houses.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Culture</span>
+                </div>
+              </div>
+            </div>
+            <div id="rajasthan-day-4" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>4</span></div>
+                <div><h3>Drive to Jaisalmer — The Golden City</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">07:00 AM</span
+                  ><span class="activity-icon">🚌</span>
+                  <div class="activity-body">
+                    <h4>Drive Jodhpur → Jaisalmer</h4>
+                    <p>4-hour drive through the Thar desert landscape.</p>
+                  </div>
+                  <span class="activity-tag">Transfer</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">12:00 PM</span
+                  ><span class="activity-icon">🏰</span>
+                  <div class="activity-body">
+                    <h4>Jaisalmer Fort (Sonar Qila)</h4>
+                    <p>
+                      A living golden sandstone fort — the only fully inhabited
+                      fort in the world.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Heritage</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">06:00 PM</span
+                  ><span class="activity-icon">🐪</span>
+                  <div class="activity-body">
+                    <h4>Sam Sand Dunes Camel Safari</h4>
+                    <p>
+                      Ride camels across the Thar desert dunes for a golden
+                      sunset.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Adventure</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">09:00 PM</span
+                  ><span class="activity-icon">🎶</span>
+                  <div class="activity-body">
+                    <h4>Desert Bonfire &amp; Folk Music</h4>
+                    <p>
+                      Traditional Rajasthani folk songs and dance under a sky
+                      full of stars.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Culture</span>
+                </div>
+              </div>
+            </div>
+            <div id="rajasthan-day-5" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>5</span></div>
+                <div><h3>Jaisalmer &amp; Desert Return</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">09:00 AM</span
+                  ><span class="activity-icon">🕌</span>
+                  <div class="activity-body">
+                    <h4>Patwon ki Haveli</h4>
+                    <p>
+                      5-storey ornate mansion with exquisite carved sandstone
+                      façade.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Heritage</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">12:00 PM</span
+                  ><span class="activity-icon">🛍️</span>
+                  <div class="activity-body">
+                    <h4>Jaisalmer Market Shopping</h4>
+                    <p>
+                      Buy mirror-work cushions, leather items, and desert
+                      handicrafts.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Shopping</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">03:00 PM</span
+                  ><span class="activity-icon">🚌</span>
+                  <div class="activity-body">
+                    <h4>Drive Back to Jaipur</h4>
+                    <p>
+                      Overnight train or long drive back towards Jaipur for
+                      departure.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Transfer</span>
+                </div>
+              </div>
+            </div>
+            <div id="rajasthan-day-6" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge"><span>DAY</span><span>6</span></div>
+                <div><h3>Departure from Jaipur</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">09:00 AM</span
+                  ><span class="activity-icon">🍛</span>
+                  <div class="activity-body">
+                    <h4>Final Breakfast &amp; Hawa Mahal</h4>
+                    <p>
+                      Last look at the iconic Palace of Winds — the perfect
+                      farewell photo.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Culture</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">12:00 PM</span
+                  ><span class="activity-icon">🧳</span>
+                  <div class="activity-body">
+                    <h4>Depart from Jaipur</h4>
+                    <p>
+                      Head to Jaipur airport or railway station for your onward
+                      journey.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Departure</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== PARIS ===== -->
+          <div class="day-panel" id="trip-paris">
+            <div class="trip-header-card">
+              <div
+                class="trip-header-img"
+                style="
+                  background-image: url(&quot;https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=900&quot;);
+                "
+              >
+                <div class="trip-header-img-overlay"></div>
+                <div class="trip-header-img-text">
+                  <h2>Paris, France</h2>
+                  <p>5 Days · Romantic Getaway</p>
+                </div>
+              </div>
+              <div class="trip-meta">
+                <div class="trip-meta-item">📅 <strong>5 Days</strong></div>
+                <div class="trip-meta-item">👥 <strong>2 Adults</strong></div>
+                <div class="trip-meta-item">
+                  💰 <strong>₹70,000 – ₹85,000</strong>
+                </div>
+              </div>
+              <div class="trip-tags-row">
+                <span class="trip-interest-tag">🗼 Landmarks</span
+                ><span class="trip-interest-tag">🍷 Wine</span
+                ><span class="trip-interest-tag">🎨 Art</span
+                ><span class="trip-interest-tag">🥐 Food</span
+                ><span class="trip-interest-tag">💑 Romantic</span>
+              </div>
+            </div>
+            <div class="day-nav-btns">
+              <button
+                class="day-nav-btn active"
+                onclick="switchDay('paris', 1, this)"
+              >
+                Day 1
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('paris', 2, this)">
+                Day 2
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('paris', 3, this)">
+                Day 3
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('paris', 4, this)">
+                Day 4
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('paris', 5, this)">
+                Day 5
+              </button>
+            </div>
+            <div id="paris-day-1" class="day-card">
+              <div class="day-card-header">
+                <div class="day-num-badge" style="background: #c9474f">
+                  <span>DAY</span><span>1</span>
+                </div>
+                <div>
+                  <h3>Arrival &amp; Eiffel Tower</h3>
+                  <p>
+                    Paris from the very first breath — the city will steal your
+                    heart.
+                  </p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">12:00 PM</span
+                  ><span class="activity-icon">🛬</span>
+                  <div class="activity-body">
+                    <h4>Arrive at Charles de Gaulle Airport</h4>
+                    <p>Take the RER B train to the city centre.</p>
+                  </div>
+                  <span class="activity-tag">Arrival</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">04:00 PM</span
+                  ><span class="activity-icon">🗼</span>
+                  <div class="activity-body">
+                    <h4>Eiffel Tower Summit Visit</h4>
+                    <p>
+                      Pre-booked skip-the-line tickets — go up all 3 levels for
+                      the best views.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Landmark</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">07:30 PM</span
+                  ><span class="activity-icon">🌉</span>
+                  <div class="activity-body">
+                    <h4>Seine River Dinner Cruise</h4>
+                    <p>
+                      Romantic boat cruise with dinner as the city's monuments
+                      light up at night.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Romantic</span>
+                </div>
+              </div>
+            </div>
+            <div id="paris-day-2" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge" style="background: #c9474f">
+                  <span>DAY</span><span>2</span>
+                </div>
+                <div><h3>Louvre &amp; Montmartre</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">09:00 AM</span
+                  ><span class="activity-icon">🖼️</span>
+                  <div class="activity-body">
+                    <h4>Louvre Museum (Half Day)</h4>
+                    <p>
+                      Mona Lisa, Venus de Milo — allow at least 3 hours for the
+                      world's largest museum.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Art</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">01:00 PM</span
+                  ><span class="activity-icon">🥐</span>
+                  <div class="activity-body">
+                    <h4>Lunch at a Classic Parisian Café</h4>
+                    <p>Croque-monsieur, onion soup, and a glass of Bordeaux.</p>
+                  </div>
+                  <span class="activity-tag">Food</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">03:30 PM</span
+                  ><span class="activity-icon">🎨</span>
+                  <div class="activity-body">
+                    <h4>Montmartre &amp; Sacré-Cœur</h4>
+                    <p>
+                      Wander the artist's quarter, watch street painters, and
+                      climb to the white basilica.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Culture</span>
+                </div>
+              </div>
+            </div>
+            <div id="paris-day-3" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge" style="background: #c9474f">
+                  <span>DAY</span><span>3</span>
+                </div>
+                <div><h3>Versailles Day Trip</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">09:00 AM</span
+                  ><span class="activity-icon">🚆</span>
+                  <div class="activity-body">
+                    <h4>RER C Train to Versailles</h4>
+                    <p>
+                      45-minute journey to the grandest royal palace in the
+                      world.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Transfer</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">10:30 AM</span
+                  ><span class="activity-icon">👑</span>
+                  <div class="activity-body">
+                    <h4>Palace of Versailles &amp; Gardens</h4>
+                    <p>
+                      Hall of Mirrors, royal apartments, and the spectacular
+                      800-hectare gardens.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Heritage</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">05:00 PM</span
+                  ><span class="activity-icon">🍷</span>
+                  <div class="activity-body">
+                    <h4>Wine Tasting Evening in Le Marais</h4>
+                    <p>
+                      Return to Paris for a curated wine tasting in a classic
+                      cave à vins.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Food</span>
+                </div>
+              </div>
+            </div>
+            <div id="paris-day-4" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge" style="background: #c9474f">
+                  <span>DAY</span><span>4</span>
+                </div>
+                <div><h3>Champs-Élysées &amp; Shopping</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">10:00 AM</span
+                  ><span class="activity-icon">🛍️</span>
+                  <div class="activity-body">
+                    <h4>Champs-Élysées Walk &amp; Shopping</h4>
+                    <p>
+                      Stroll the world's most famous avenue — Louis Vuitton,
+                      cafés, and boutiques.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Shopping</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">02:00 PM</span
+                  ><span class="activity-icon">🏛️</span>
+                  <div class="activity-body">
+                    <h4>Arc de Triomphe Rooftop</h4>
+                    <p>
+                      Climb to the top for a 360° view of Paris and all 12
+                      avenues radiating out.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Landmark</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">08:00 PM</span
+                  ><span class="activity-icon">🕯️</span>
+                  <div class="activity-body">
+                    <h4>Romantic Dinner at a Brasserie</h4>
+                    <p>
+                      Fine French dining — duck confit, cheese platter, and
+                      crème brûlée.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Dining</span>
+                </div>
+              </div>
+            </div>
+            <div id="paris-day-5" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge" style="background: #c9474f">
+                  <span>DAY</span><span>5</span>
+                </div>
+                <div><h3>Departure Day</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">09:00 AM</span
+                  ><span class="activity-icon">🥐</span>
+                  <div class="activity-body">
+                    <h4>Last Parisian Breakfast</h4>
+                    <p>
+                      Croissant, café au lait, and pain au chocolat at the hotel
+                      or local boulangerie.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Meal</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">11:00 AM</span
+                  ><span class="activity-icon">🧳</span>
+                  <div class="activity-body">
+                    <h4>Check-out &amp; Depart for Airport</h4>
+                    <p>Au revoir, Paris — until the next time.</p>
+                  </div>
+                  <span class="activity-tag">Departure</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== TOKYO ===== -->
+          <div class="day-panel" id="trip-tokyo">
+            <div class="trip-header-card">
+              <div
+                class="trip-header-img"
+                style="
+                  background-image: url(&quot;https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=900&quot;);
+                "
+              >
+                <div class="trip-header-img-overlay"></div>
+                <div class="trip-header-img-text">
+                  <h2>Tokyo, Japan</h2>
+                  <p>7 Days · Culture &amp; Tech Explorer</p>
+                </div>
+              </div>
+              <div class="trip-meta">
+                <div class="trip-meta-item">📅 <strong>7 Days</strong></div>
+                <div class="trip-meta-item">👥 <strong>2 Adults</strong></div>
+                <div class="trip-meta-item">
+                  💰 <strong>₹60,000 – ₹75,000</strong>
+                </div>
+              </div>
+              <div class="trip-tags-row">
+                <span class="trip-interest-tag">🍣 Sushi</span
+                ><span class="trip-interest-tag">⛩️ Temples</span
+                ><span class="trip-interest-tag">🎮 Tech</span
+                ><span class="trip-interest-tag">🌸 Cherry Blossom</span
+                ><span class="trip-interest-tag">🛍️ Harajuku</span>
+              </div>
+            </div>
+            <div class="day-nav-btns">
+              <button
+                class="day-nav-btn active"
+                onclick="switchDay('tokyo', 1, this)"
+              >
+                Day 1
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('tokyo', 2, this)">
+                Day 2
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('tokyo', 3, this)">
+                Day 3
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('tokyo', 4, this)">
+                Day 4
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('tokyo', 5, this)">
+                Day 5
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('tokyo', 6, this)">
+                Day 6
+              </button>
+              <button class="day-nav-btn" onclick="switchDay('tokyo', 7, this)">
+                Day 7
+              </button>
+            </div>
+            <div id="tokyo-day-1" class="day-card">
+              <div class="day-card-header">
+                <div class="day-num-badge" style="background: #c0392b">
+                  <span>DAY</span><span>1</span>
+                </div>
+                <div>
+                  <h3>Arrival in Tokyo</h3>
+                  <p>
+                    Land in the future — Shinjuku and the neon skyline awaits.
+                  </p>
+                </div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">12:00 PM</span
+                  ><span class="activity-icon">🛬</span>
+                  <div class="activity-body">
+                    <h4>Arrive at Narita / Haneda Airport</h4>
+                    <p>
+                      Take the Narita Express or Limousine Bus to your hotel in
+                      Shinjuku.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Arrival</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">04:00 PM</span
+                  ><span class="activity-icon">🌆</span>
+                  <div class="activity-body">
+                    <h4>Shinjuku Exploration</h4>
+                    <p>
+                      Kabukicho district, Golden Gai alley, and the Tokyo
+                      Metropolitan Government Building free observatory.
+                    </p>
+                  </div>
+                  <span class="activity-tag">City</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">07:30 PM</span
+                  ><span class="activity-icon">🍣</span>
+                  <div class="activity-body">
+                    <h4>First Sushi Dinner — Conveyor Belt</h4>
+                    <p>
+                      Experience Kaitenzushi (rotating sushi) — fresh,
+                      affordable and uniquely Tokyo.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Food</span>
+                </div>
+              </div>
+            </div>
+            <div id="tokyo-day-2" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge" style="background: #c0392b">
+                  <span>DAY</span><span>2</span>
+                </div>
+                <div><h3>Senso-ji &amp; Asakusa</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">08:00 AM</span
+                  ><span class="activity-icon">⛩️</span>
+                  <div class="activity-body">
+                    <h4>Senso-ji Temple &amp; Nakamise Shopping</h4>
+                    <p>
+                      Tokyo's oldest temple — arrive early for the best
+                      atmosphere and photos.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Culture</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">12:00 PM</span
+                  ><span class="activity-icon">🍜</span>
+                  <div class="activity-body">
+                    <h4>Ramen in Asakusa</h4>
+                    <p>
+                      Try tonkotsu or shoyu ramen at a classic neighbourhood
+                      ramen shop.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Food</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">03:00 PM</span
+                  ><span class="activity-icon">🌉</span>
+                  <div class="activity-body">
+                    <h4>Tokyo Skytree</h4>
+                    <p>
+                      Ascend the world's second tallest tower for a 360° view
+                      over the entire city.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Landmark</span>
+                </div>
+              </div>
+            </div>
+            <div id="tokyo-day-3" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge" style="background: #c0392b">
+                  <span>DAY</span><span>3</span>
+                </div>
+                <div><h3>Harajuku &amp; Shibuya</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">10:00 AM</span
+                  ><span class="activity-icon">🛍️</span>
+                  <div class="activity-body">
+                    <h4>Takeshita Street, Harajuku</h4>
+                    <p>
+                      Colourful fashion, crepes, and Japan's most unique street
+                      culture.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Fashion</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">01:00 PM</span
+                  ><span class="activity-icon">🌿</span>
+                  <div class="activity-body">
+                    <h4>Meiji Jingu Shrine</h4>
+                    <p>
+                      Peaceful forested shrine dedicated to Emperor Meiji — a
+                      calm oasis in the city.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Culture</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">05:00 PM</span
+                  ><span class="activity-icon">🚶</span>
+                  <div class="activity-body">
+                    <h4>Shibuya Scramble Crossing</h4>
+                    <p>
+                      The world's busiest pedestrian crossing — watch from above
+                      at the Starbucks window seat.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Iconic</span>
+                </div>
+              </div>
+            </div>
+            <div id="tokyo-day-4" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge" style="background: #c0392b">
+                  <span>DAY</span><span>4</span>
+                </div>
+                <div><h3>Day Trip to Nikko</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">08:00 AM</span
+                  ><span class="activity-icon">🚄</span>
+                  <div class="activity-body">
+                    <h4>Shinkansen to Nikko</h4>
+                    <p>
+                      2-hour bullet train ride to the UNESCO World Heritage
+                      mountain town.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Transfer</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">11:00 AM</span
+                  ><span class="activity-icon">⛩️</span>
+                  <div class="activity-body">
+                    <h4>Tosho-gu Shrine Complex</h4>
+                    <p>
+                      Extraordinarily ornate shrines with gold-leaf carvings in
+                      a cedar forest.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Heritage</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">04:00 PM</span
+                  ><span class="activity-icon">🚄</span>
+                  <div class="activity-body">
+                    <h4>Return to Tokyo</h4>
+                    <p>
+                      Evening return — stop at Akihabara for electronics and
+                      anime on the way back.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Return</span>
+                </div>
+              </div>
+            </div>
+            <div id="tokyo-day-5" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge" style="background: #c0392b">
+                  <span>DAY</span><span>5</span>
+                </div>
+                <div><h3>Akihabara &amp; Odaiba</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">10:00 AM</span
+                  ><span class="activity-icon">🎮</span>
+                  <div class="activity-body">
+                    <h4>Akihabara Electric Town</h4>
+                    <p>
+                      Japan's tech and gaming hub — multi-floor electronics
+                      shops and manga stores.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Tech</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">02:00 PM</span
+                  ><span class="activity-icon">🤖</span>
+                  <div class="activity-body">
+                    <h4>teamLab Planets, Odaiba</h4>
+                    <p>
+                      Walk-through digital art museum — immersive and truly
+                      unlike anything else.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Art</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">07:00 PM</span
+                  ><span class="activity-icon">🍣</span>
+                  <div class="activity-body">
+                    <h4>Tsukiji Outer Market Dinner</h4>
+                    <p>
+                      Fresh seafood, tamagoyaki, and Japan's finest street food
+                      in the evening.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Food</span>
+                </div>
+              </div>
+            </div>
+            <div id="tokyo-day-6" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge" style="background: #c0392b">
+                  <span>DAY</span><span>6</span>
+                </div>
+                <div><h3>Mt. Fuji Day Trip</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">06:30 AM</span
+                  ><span class="activity-icon">🚌</span>
+                  <div class="activity-body">
+                    <h4>Bus from Shinjuku to Mt. Fuji</h4>
+                    <p>
+                      2-hour direct highway bus to the Fuji 5th Station
+                      (2,300m).
+                    </p>
+                  </div>
+                  <span class="activity-tag">Transfer</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">10:00 AM</span
+                  ><span class="activity-icon">🗻</span>
+                  <div class="activity-body">
+                    <h4>Fuji 5th Station &amp; Trails</h4>
+                    <p>
+                      Hike Yoshida trail to Station 7, enjoy the cloud-level
+                      views of Japan.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Nature</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">02:00 PM</span
+                  ><span class="activity-icon">🏞️</span>
+                  <div class="activity-body">
+                    <h4>Kawaguchiko Lake</h4>
+                    <p>
+                      Stunning Fuji reflection views and the charming lakeside
+                      village.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Scenic</span>
+                </div>
+              </div>
+            </div>
+            <div id="tokyo-day-7" class="day-card" style="display: none">
+              <div class="day-card-header">
+                <div class="day-num-badge" style="background: #c0392b">
+                  <span>DAY</span><span>7</span>
+                </div>
+                <div><h3>Departure Day</h3></div>
+              </div>
+              <div class="activity-list">
+                <div class="activity-row">
+                  <span class="activity-time">09:00 AM</span
+                  ><span class="activity-icon">🍡</span>
+                  <div class="activity-body">
+                    <h4>Last Japanese Breakfast</h4>
+                    <p>
+                      Miso soup, tamagoyaki, rice, and pickled vegetables — the
+                      classic set.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Meal</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">11:00 AM</span
+                  ><span class="activity-icon">🛍️</span>
+                  <div class="activity-body">
+                    <h4>Last Souvenir Shopping</h4>
+                    <p>
+                      Kit Kats in unique flavours, matcha products, and manga —
+                      popular gifts.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Shopping</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-time">01:00 PM</span
+                  ><span class="activity-icon">🧳</span>
+                  <div class="activity-body">
+                    <h4>Transfer to Airport</h4>
+                    <p>
+                      Sayōnara, Tokyo — you'll want to return before you even
+                      leave.
+                    </p>
+                  </div>
+                  <span class="activity-tag">Departure</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END TRIP PANELS -->
+        </div>
+
+        <!-- RIGHT: SIDEBAR -->
+        <div class="itinerary-sidebar">
+          <!-- Budget Estimate (dynamic per trip) -->
+          <div class="sidebar-card" id="sidebar-budget">
+            <h4>💰 Estimated Budget</h4>
+            <div id="budget-breakdown">
+              <!-- filled by JS -->
+            </div>
+          </div>
+
+          <!-- Weather -->
+          <div class="sidebar-card" id="sidebar-weather">
+            <h4>🌤️ Best Time to Visit</h4>
+            <div class="weather-row" id="weather-info">
+              <!-- filled by JS -->
+            </div>
+          </div>
+
+          <!-- Packing List -->
+          <div class="sidebar-card">
+            <h4>🎒 Packing Essentials</h4>
+            <div id="packing-list">
+              <!-- filled by JS -->
+            </div>
+          </div>
+
+          <!-- Pro Tips -->
+          <div class="sidebar-card">
+            <h4>💡 Pro Tips</h4>
+            <div id="pro-tips">
+              <!-- filled by JS -->
+            </div>
+          </div>
+
+          <!-- Custom planner CTA -->
+          <div class="coming-soon-card">
+            <div class="cs-icon">🗺️</div>
+            <h3>Build Your Own Trip</h3>
+            <p>
+              Custom itinerary builder with AI-powered day planning is coming
+              very soon!
+            </p>
+            <div class="notify-form">
+              <input
+                type="email"
+                id="notifyEmail"
+                placeholder="your@email.com"
+              />
+              <button class="btn-primary" onclick="notifyMe()">
+                Notify Me
+              </button>
+            </div>
+            <div class="coming-features">
+              <div class="cf-item">
+                <span>📅</span><span>Pick any dates &amp; destination</span>
+              </div>
+              <div class="cf-item">
+                <span>🏨</span><span>Choose accommodation type</span>
+              </div>
+              <div class="cf-item">
+                <span>🎯</span><span>Filter by travel interests</span>
+              </div>
+              <div class="cf-item">
+                <span>📄</span><span>Export itinerary as PDF</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OTHER SAMPLE TRIPS -->
+    <section class="section bg-light">
+      <div class="section-header">
+        <p class="section-tag">More Itineraries</p>
+        <h2>Other Popular Trip Plans</h2>
+        <p class="section-sub">
+          Click any destination tab above to explore full day-by-day
+          itineraries.
+        </p>
+      </div>
+      <div class="other-trips-grid">
+        <div class="other-trip-card">
+          <div
+            class="other-trip-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&quot;);
+            "
+          >
+            <div class="other-trip-img-overlay"></div>
+            <div class="other-trip-img-label">Manali, India</div>
+          </div>
+          <div class="other-trip-body">
+            <p>5 days · Mountains · Adventure</p>
+            <div class="other-trip-meta">
+              <span>⭐ 4.8</span><strong>From ₹12,999</strong>
+            </div>
+          </div>
+        </div>
+        <div class="other-trip-card">
+          <div
+            class="other-trip-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1555993539-1732b0258235?w=600&quot;);
+            "
+          >
+            <div class="other-trip-img-overlay"></div>
+            <div class="other-trip-img-label">Santorini, Greece</div>
+          </div>
+          <div class="other-trip-body">
+            <p>6 days · Beach · Romantic</p>
+            <div class="other-trip-meta">
+              <span>⭐ 4.9</span><strong>From ₹85,000</strong>
+            </div>
+          </div>
+        </div>
+        <div class="other-trip-card">
+          <div
+            class="other-trip-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=600&quot;);
+            "
+          >
+            <div class="other-trip-img-overlay"></div>
+            <div class="other-trip-img-label">Serengeti, Tanzania</div>
+          </div>
+          <div class="other-trip-body">
+            <p>8 days · Wildlife · Safari</p>
+            <div class="other-trip-meta">
+              <span>⭐ 4.7</span><strong>From ₹55,000</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-bottom">
+        <p>
+          © 2025 RoamRight. All rights reserved. Designed in Gujarat, India.
+        </p>
+      </div>
+    </footer>
+
+    <div id="toast" class="toast"></div>
+    <script src="script.js"></script>
+    <script>
+      // ---- SIDEBAR DATA ----
+      var sidebarData = {
+        bali: {
+          budget: [
+            ["Flights (Return)", "₹22,000"],
+            ["Accommodation (7N)", "₹12,000"],
+            ["Food & Dining", "₹5,000"],
+            ["Activities", "₹4,500"],
+            ["Transport", "₹2,500"],
+            ["Total Estimate", "₹46,000–₹55,000"],
+          ],
+          weather: [
+            { icon: "☀️", label: "Best Season", val: "Apr–Oct" },
+            { icon: "🌡️", label: "Avg Temp", val: "28°C" },
+            { icon: "🌧️", label: "Avoid", val: "Nov–Mar" },
+            { icon: "👗", label: "Wear", val: "Light Cotton" },
+          ],
+          packing: [
+            "Sunscreen SPF 50+",
+            "Light linen clothes",
+            "Mosquito repellent",
+            "Waterproof bag",
+            "Sarong (temple visits)",
+            "Flip flops & reef shoes",
+            "Power adapter (Type C)",
+          ],
+          tips: [
+            {
+              icon: "🛕",
+              text: "Always carry a sarong for temple entries — required for women and men.",
+            },
+            {
+              icon: "💵",
+              text: "Withdraw cash at airport ATMs — many local places don't accept cards.",
+            },
+            {
+              icon: "🏍️",
+              text: "Renting a scooter is the best way to explore — ensure you have an international license.",
+            },
+            {
+              icon: "💧",
+              text: "Never drink tap water — bottled water is cheap and available everywhere.",
+            },
+          ],
+        },
+        manali: {
+          budget: [
+            ["Bus/Train from Delhi", "₹1,500"],
+            ["Accommodation (5N)", "₹6,000"],
+            ["Food & Dining", "₹2,500"],
+            ["Activities", "₹2,000"],
+            ["Local Transport", "₹1,500"],
+            ["Total Estimate", "₹13,500–₹18,000"],
+          ],
+          weather: [
+            { icon: "❄️", label: "Peak Season", val: "Dec–Feb" },
+            { icon: "🌸", label: "Best For Flowers", val: "Apr–Jun" },
+            { icon: "🌡️", label: "Avg Temp", val: "5°C–20°C" },
+            { icon: "🧥", label: "Wear", val: "Warm Layers" },
+          ],
+          packing: [
+            "Heavy winter jacket",
+            "Thermal inner wear",
+            "Waterproof trekking boots",
+            "Sunglasses (high UV)",
+            "Lip balm & moisturiser",
+            "Altitude sickness tablets",
+            "Woolen socks & gloves",
+          ],
+          tips: [
+            {
+              icon: "📋",
+              text: "Book Rohtang Pass permits online 2–3 days in advance — limited daily passes.",
+            },
+            {
+              icon: "🏔️",
+              text: "Go slow on Day 1 to acclimatise — altitude sickness is common for first-timers.",
+            },
+            {
+              icon: "💸",
+              text: "Cash is essential — ATMs can run out in peak season. Carry extra.",
+            },
+            {
+              icon: "🔋",
+              text: "Power cuts are common at night. Carry a power bank and torch.",
+            },
+          ],
+        },
+        rajasthan: {
+          budget: [
+            ["Train (Ahmedabad–Jaipur)", "₹1,200"],
+            ["Accommodation (6N)", "₹9,000"],
+            ["Food & Dining", "₹3,500"],
+            ["Entry Fees & Tours", "₹3,000"],
+            ["Local Transport", "₹2,500"],
+            ["Total Estimate", "₹29,000–₹36,000"],
+          ],
+          weather: [
+            { icon: "🌤️", label: "Best Season", val: "Oct–Mar" },
+            { icon: "🌡️", label: "Avg Temp", val: "15°C–28°C" },
+            { icon: "🔥", label: "Avoid", val: "May–Aug" },
+            { icon: "👘", label: "Wear", val: "Light Cottons" },
+          ],
+          packing: [
+            "Light cotton kurta/clothes",
+            "Comfortable walking shoes",
+            "Scarf/dupatta for temples",
+            "Sunglasses & hat",
+            "Sunscreen SPF 50",
+            "Small cash for bazaars",
+            "Camera with extra SD card",
+          ],
+          tips: [
+            {
+              icon: "🎟️",
+              text: "Buy combo tickets for Jaipur's forts — saves ₹200–400 per person.",
+            },
+            {
+              icon: "🤝",
+              text: "Bargain confidently at bazaars — expect to pay 50–60% of the first quoted price.",
+            },
+            {
+              icon: "🐪",
+              text: "Book camel safaris through your hotel — avoid touts at Sam Sand Dunes entrance.",
+            },
+            {
+              icon: "🌅",
+              text: "Wake up early for the best light — forts are magical in the golden morning hour.",
+            },
+          ],
+        },
+        paris: {
+          budget: [
+            ["Return Flights", "₹38,000"],
+            ["Accommodation (5N)", "₹18,000"],
+            ["Food & Dining", "₹8,000"],
+            ["Activities & Museums", "₹5,000"],
+            ["Local Transport", "₹2,500"],
+            ["Total Estimate", "₹71,500–₹85,000"],
+          ],
+          weather: [
+            { icon: "🌸", label: "Best Season", val: "Apr–Jun" },
+            { icon: "🍂", label: "Also Great", val: "Sep–Oct" },
+            { icon: "🌡️", label: "Avg Temp", val: "12°C–22°C" },
+            { icon: "👗", label: "Wear", val: "Smart Casual" },
+          ],
+          packing: [
+            "Smart casual outfits",
+            "Comfortable walking shoes",
+            "Light jacket/cardigan",
+            "Universal travel adapter",
+            "Museum pass card",
+            "French phrasebook/app",
+            "Compact umbrella",
+          ],
+          tips: [
+            {
+              icon: "🎟️",
+              text: "Buy the Paris Museum Pass for unlimited entry — massive savings if you visit 4+ museums.",
+            },
+            {
+              icon: "🚇",
+              text: "The Metro is cheap and easy — buy a Navigo Easy card from any station.",
+            },
+            {
+              icon: "🥐",
+              text: "Breakfast in Parisian bakeries is cheaper and better than hotel buffets.",
+            },
+            {
+              icon: "🗼",
+              text: "Book Eiffel Tower tickets 3–4 weeks in advance — online queues sell out fast.",
+            },
+          ],
+        },
+        tokyo: {
+          budget: [
+            ["Return Flights", "₹28,000"],
+            ["Accommodation (7N)", "₹18,000"],
+            ["Food & Dining", "₹7,000"],
+            ["Activities", "₹5,000"],
+            ["JR Pass & Transport", "₹5,500"],
+            ["Total Estimate", "₹63,500–₹75,000"],
+          ],
+          weather: [
+            { icon: "🌸", label: "Cherry Blossom", val: "Mar–Apr" },
+            { icon: "🍁", label: "Autumn Leaves", val: "Oct–Nov" },
+            { icon: "🌡️", label: "Avg Temp", val: "10°C–25°C" },
+            { icon: "👟", label: "Wear", val: "Layers" },
+          ],
+          packing: [
+            "Comfortable walking shoes",
+            "Portable WiFi/SIM card",
+            "IC Card (Suica) for transport",
+            "Cash in Yen (many places cash-only)",
+            "Modest clothing for temples",
+            "Small day-pack",
+            "Power bank",
+          ],
+          tips: [
+            {
+              icon: "💴",
+              text: "Many small restaurants are cash-only — always carry Yen. ATMs at 7-Eleven work for foreign cards.",
+            },
+            {
+              icon: "🚆",
+              text: "Buy a JR Pass before you arrive in Japan — far cheaper than buying in-country.",
+            },
+            {
+              icon: "📱",
+              text: "Get a pocket WiFi or data SIM at the airport — Japan's 4G coverage is excellent.",
+            },
+            {
+              icon: "🎌",
+              text: "Always bow slightly when thanking shopkeepers — small gestures matter a lot in Japan.",
+            },
+          ],
+        },
+      };
+
+      var currentTrip = "bali";
+
+      function switchTrip(trip, tabEl) {
+        // Hide all panels
+        document.querySelectorAll(".day-panel").forEach(function (p) {
+          p.classList.remove("active");
+        });
+        document.getElementById("trip-" + trip).classList.add("active");
+        // Update tabs
+        document.querySelectorAll(".itab").forEach(function (t) {
+          t.classList.remove("active");
+        });
+        if (tabEl) tabEl.classList.add("active");
+        currentTrip = trip;
+        updateSidebar(trip);
+      }
+
+      function switchDay(trip, day, btn) {
+        // Hide all days for this trip
+        var panel = document.getElementById("trip-" + trip);
+        panel
+          .querySelectorAll('[id^="' + trip + '-day-"]')
+          .forEach(function (d) {
+            d.style.display = "none";
+          });
+        document.getElementById(trip + "-day-" + day).style.display = "block";
+        // Update buttons
+        panel.querySelectorAll(".day-nav-btn").forEach(function (b) {
+          b.classList.remove("active");
+        });
+        if (btn) btn.classList.add("active");
+      }
+
+      function updateSidebar(trip) {
+        var data = sidebarData[trip];
+        if (!data) return;
+
+        // Budget
+        var bd = document.getElementById("budget-breakdown");
+        if (bd) {
+          var html = "";
+          data.budget.forEach(function (row, i) {
+            var isTotal = i === data.budget.length - 1;
+            html +=
+              '<div class="budget-row' +
+              (isTotal ? " total" : "") +
+              '"><span>' +
+              row[0] +
+              "</span><span>" +
+              row[1] +
+              "</span></div>";
+          });
+          bd.innerHTML = html;
+        }
+
+        // Weather
+        var wi = document.getElementById("weather-info");
+        if (wi) {
+          var wHtml = "";
+          data.weather.forEach(function (w) {
+            wHtml +=
+              '<div class="weather-item"><div class="wi-icon">' +
+              w.icon +
+              '</div><div class="wi-label">' +
+              w.label +
+              '</div><div class="wi-val">' +
+              w.val +
+              "</div></div>";
+          });
+          wi.innerHTML = wHtml;
+        }
+
+        // Packing
+        var pl = document.getElementById("packing-list");
+        if (pl) {
+          var pHtml = "";
+          data.packing.forEach(function (item) {
+            pHtml += '<div class="packing-item">' + item + "</div>";
+          });
+          pl.innerHTML = pHtml;
+        }
+
+        // Tips
+        var pt = document.getElementById("pro-tips");
+        if (pt) {
+          var tHtml = "";
+          data.tips.forEach(function (tip) {
+            tHtml +=
+              '<div class="tip-item"><span class="tip-icon">' +
+              tip.icon +
+              "</span><span>" +
+              tip.text +
+              "</span></div>";
+          });
+          pt.innerHTML = tHtml;
+        }
+      }
+
+      function notifyMe() {
+        var email = document.getElementById("notifyEmail");
+        if (!email || !email.value.trim() || !email.value.includes("@")) {
+          showToast("Please enter a valid email!");
+          return;
+        }
+        showToast("🎉 You're on the list! We'll notify you.");
+        email.value = "";
+      }
+
+      // Init sidebar on load
+      document.addEventListener("DOMContentLoaded", function () {
+        updateSidebar("bali");
+      });
+    </script>
+  </body>
+</html>
