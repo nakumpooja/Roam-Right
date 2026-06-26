@@ -92,31 +92,31 @@ The website was designed in Figma and developed using **HTML, CSS, JavaScript, a
 
 ### 🏠 Home Page
 
-![Home Page](assets/screenshots/home.jpeg)
+![Home Page](assets/Screenshots/home.jpeg)
 
 ---
 
 ### 🔐 Login Page
 
-![Login Page](assets/screenshots/login.jpeg)
+![Login Page](assets/Screenshots/login.jpeg)
 
 ---
 
 ### 🌍 Destinations Page
 
-![Destinations Page](assets/screenshots/destination.jpeg)
+![Destinations Page](assets/Screenshots/destination.jpeg)
 
 ### 🚀 Trip Planing Page
 
-![Trip Planing Page](assets/screenshots/trip.jpeg)
+![Trip Planing Page](assets/Screenshots/trip.jpeg)
 
 ### 🚀 About Page
 
-![About Page](assets/screenshots/about.jpeg)
+![About Page](assets/Screenshots/about.jpeg)
 
 ### 👩‍💻 Contact Page
 
-![Contact Page](assets/screenshots/contact.jpeg)
+![Contact Page](assets/Screenshots/contact.jpeg)
 
 ## 🚀 Future Enhancements
 
