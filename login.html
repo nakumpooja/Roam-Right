@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – RoamRight</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body class="auth-body">
+
+<div class="auth-layout">
+
+  <!-- LEFT PANEL -->
+  <div class="auth-visual">
+    <div class="auth-visual-overlay"></div>
+    <div class="auth-visual-content">
+      <div class="nav-logo white" onclick="location.href='index.html'" style="cursor:pointer;margin-bottom:3rem">Roam<span style="color:#f0c060">Right</span></div>
+      <h2>"The world is a book,<br/>and those who do not travel<br/>read only one page."</h2>
+      <p>— Saint Augustine</p>
+      <div class="auth-destinations">
+        <div class="auth-dest-chip">🏖️ Bali</div>
+        <div class="auth-dest-chip">🏔️ Manali</div>
+        <div class="auth-dest-chip">🗼 Paris</div>
+        <div class="auth-dest-chip">🌸 Tokyo</div>
+        <div class="auth-dest-chip">🏛️ Rajasthan</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT FORM PANEL -->
+  <div class="auth-form-panel">
+    <div class="auth-form-wrap">
+      <div class="auth-header">
+        <h1>Welcome Back!</h1>
+        <p>Log in to access your saved trips, bookings, and wishlist.</p>
+      </div>
+
+      <div id="loginForm">
+        <div class="social-auth">
+          <button class="social-btn" onclick="socialLogin('Google')">
+            <span>G</span> Continue with Google
+          </button>
+          <button class="social-btn" onclick="socialLogin('Facebook')">
+            <span>f</span> Continue with Facebook
+          </button>
+        </div>
+        <div class="auth-divider"><span>or log in with email</span></div>
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="your@email.com" onkeydown="if(event.key==='Enter') loginUser()"/>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="password-wrap">
+            <input type="password" id="loginPass" placeholder="Enter your password" onkeydown="if(event.key==='Enter') loginUser()"/>
+            <button class="toggle-pass" onclick="togglePassword('loginPass', this)">👁</button>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label class="remember-me"><input type="checkbox" id="rememberMe"/> Remember me</label>
+          <a href="#" onclick="showForgotPassword()" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <div id="loginError" class="form-error hidden"></div>
+
+        <button class="btn-primary full-width" onclick="loginUser()">Log In →</button>
+
+        <p class="auth-switch">Don't have an account? <a href="signup.html">Sign up free</a></p>
+      </div>
+
+      <!-- FORGOT PASSWORD PANEL -->
+      <div id="forgotPanel" class="hidden">
+        <h2 style="margin-bottom:.5rem">Reset Password</h2>
+        <p style="color:#666;margin-bottom:1.5rem">Enter your email and we'll send you a reset link.</p>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="forgotEmail" placeholder="your@email.com"/>
+        </div>
+        <button class="btn-primary full-width" onclick="sendReset()">Send Reset Link</button>
+        <p style="text-align:center;margin-top:1rem"><a href="#" onclick="showLoginForm()" style="color:var(--accent)">← Back to Login</a></p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>

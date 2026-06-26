@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Destinations – RoamRight</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ---- COMING SOON BADGE ---- */
+      .dest-badge-coming {
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        background: rgba(26, 26, 46, 0.85);
+        color: #f0c060;
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 0.35rem 0.9rem;
+        border-radius: 50px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        backdrop-filter: blur(4px);
+      }
+      /* ---- STATIC CARD - no pointer on book ---- */
+      .dest-card-static .dest-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .dest-tag {
+        display: inline-block;
+        background: var(--bg-light);
+        color: var(--text-light);
+        font-size: 0.78rem;
+        font-weight: 500;
+        padding: 0.3rem 0.85rem;
+        border-radius: 50px;
+        border: 1px solid var(--border);
+        letter-spacing: 0.5px;
+      }
+      /* ---- INFO BANNER ---- */
+      .info-banner {
+        background: linear-gradient(90deg, #1a1a2e, #16213e);
+        color: rgba(255, 255, 255, 0.85);
+        text-align: center;
+        padding: 0.75rem 5%;
+        font-size: 0.88rem;
+        letter-spacing: 0.3px;
+      }
+      .info-banner span {
+        color: #f0c060;
+        font-weight: 600;
+      }
+
+      /* ---- CATEGORY CHIPS ---- */
+      .cat-chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+        margin-top: 1.2rem;
+      }
+      .cat-chip {
+        padding: 0.4rem 1rem;
+        border-radius: 50px;
+        border: 1.5px solid var(--border);
+        font-size: 0.84rem;
+        background: white;
+        color: var(--text);
+        cursor: default;
+      }
+
+      /* ---- HIGHLIGHT STRIP ---- */
+      .highlight-strip {
+        background: var(--bg-light);
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        padding: 2rem 5%;
+        flex-wrap: wrap;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .hl-item {
+        text-align: center;
+      }
+      .hl-item .hl-icon {
+        font-size: 1.6rem;
+        margin-bottom: 0.3rem;
+      }
+      .hl-item h4 {
+        font-size: 0.95rem;
+        color: var(--primary);
+      }
+      .hl-item p {
+        font-size: 0.8rem;
+        color: var(--text-light);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar scrolled" id="navbar">
+      <div class="nav-logo" onclick="location.href = 'index.html'">
+        Roam<span>Right</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="destinations.html" class="active">Destinations</a></li>
+        <li><a href="trips.html">Plan Trip</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <!-- <a href="login.html" class="btn-outline"></a>-->
+        <a href="signup.html" class="btn-primary">Logout</a>
+      </div>
+      <div class="hamburger" onclick="toggleMenu()">&#9776;</div>
+    </nav>
+
+    <!-- INFO BANNER -->
+    <div class="info-banner" style="margin-top: 64px">
+      ✈️ &nbsp;Browse our handpicked destinations —
+      <span>full booking available soon!</span> &nbsp;|&nbsp; Sign up to get
+      notified first.
+    </div>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+      <div class="page-hero-overlay"></div>
+      <div class="page-hero-content">
+        <p class="hero-tag">✦ 120+ Places</p>
+        <h1>Explore Destinations</h1>
+        <p>
+          Find your perfect getaway from our curated collection of global
+          destinations.
+        </p>
+      </div>
+    </section>
+
+    <!-- HIGHLIGHT STRIP -->
+    <div class="highlight-strip">
+      <div class="hl-item">
+        <div class="hl-icon">🗺️</div>
+        <h4>120+ Destinations</h4>
+        <p>Across 40+ countries</p>
+      </div>
+      <div class="hl-item">
+        <div class="hl-icon">⭐</div>
+        <h4>Curated & Rated</h4>
+        <p>Only the best, hand-picked</p>
+      </div>
+      <div class="hl-item">
+        <div class="hl-icon">💰</div>
+        <h4>All Budgets</h4>
+        <p>From ₹12,999 to luxury</p>
+      </div>
+      <div class="hl-item">
+        <div class="hl-icon">🔔</div>
+        <h4>Booking Coming Soon</h4>
+        <p>Sign up to be notified</p>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <section class="filter-section">
+      <div class="filter-bar">
+        <div class="filter-search">
+          <input
+            type="text"
+            id="destSearch"
+            placeholder="Search destination..."
+            oninput="filterCards()"
+          />
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-btn active" onclick="setFilter('All', this)">
+            All
+          </button>
+          <button class="filter-btn" onclick="setFilter('Beach', this)">
+            🏖️ Beach
+          </button>
+          <button class="filter-btn" onclick="setFilter('Mountain', this)">
+            🏔️ Mountain
+          </button>
+          <button class="filter-btn" onclick="setFilter('Culture', this)">
+            🏛️ Culture
+          </button>
+          <button class="filter-btn" onclick="setFilter('Adventure', this)">
+            🧗 Adventure
+          </button>
+          <button class="filter-btn" onclick="setFilter('City', this)">
+            🌆 City
+          </button>
+          <button class="filter-btn" onclick="setFilter('Wildlife', this)">
+            🦁 Wildlife
+          </button>
+        </div>
+        <div class="sort-bar">
+          <label>Sort by:</label>
+          <select id="sortBy" onchange="sortCards()">
+            <option value="popular">Most Popular</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESTINATIONS GRID -->
+    <section class="section">
+      <div id="destGrid" class="destinations-grid large">
+        <!-- MANALI -->
+        <div
+          class="dest-card dest-card-static"
+          data-category="Mountain"
+          data-price="12999"
+          data-rating="4.8"
+        >
+          <div
+            class="dest-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&quot;);
+            "
+          >
+            <span class="dest-badge">Trending</span>
+            <button class="dest-fav" onclick="toggleFav(this)">♡</button>
+            <span class="dest-badge-coming">Booking Soon</span>
+          </div>
+          <div class="dest-info">
+            <div class="dest-top">
+              <h3>Manali, India</h3>
+              <span>⭐ 4.8</span>
+            </div>
+            <p>
+              Snow-capped Himalayan peaks, river valleys, and adventure sports.
+            </p>
+            <div class="dest-footer">
+              <span class="dest-price">From ₹12,999</span>
+              <span class="dest-tag">🏔️ Mountain</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BALI -->
+        <div
+          class="dest-card dest-card-static"
+          data-category="Beach"
+          data-price="45000"
+          data-rating="4.9"
+        >
+          <div
+            class="dest-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&quot;);
+            "
+          >
+            <span class="dest-badge">Popular</span>
+            <button class="dest-fav" onclick="toggleFav(this)">♡</button>
+            <span class="dest-badge-coming">Booking Soon</span>
+          </div>
+          <div class="dest-info">
+            <div class="dest-top">
+              <h3>Bali, Indonesia</h3>
+              <span>⭐ 4.9</span>
+            </div>
+            <p>
+              Tropical beaches, rice terraces, temples, and vibrant nightlife.
+            </p>
+            <div class="dest-footer">
+              <span class="dest-price">From ₹45,000</span>
+              <span class="dest-tag">🏖️ Beach</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SANTORINI -->
+        <div
+          class="dest-card dest-card-static"
+          data-category="Beach"
+          data-price="85000"
+          data-rating="4.9"
+        >
+          <div
+            class="dest-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1555993539-1732b0258235?w=600&quot;);
+            "
+          >
+            <span class="dest-badge">Must Visit</span>
+            <button class="dest-fav" onclick="toggleFav(this)">♡</button>
+            <span class="dest-badge-coming">Booking Soon</span>
+          </div>
+          <div class="dest-info">
+            <div class="dest-top">
+              <h3>Santorini, Greece</h3>
+              <span>⭐ 4.9</span>
+            </div>
+            <p>
+              White-washed cliffs, volcanic beaches, and breathtaking sunsets.
+            </p>
+            <div class="dest-footer">
+              <span class="dest-price">From ₹85,000</span>
+              <span class="dest-tag">🏖️ Beach</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOKYO -->
+        <div
+          class="dest-card dest-card-static"
+          data-category="City"
+          data-price="65000"
+          data-rating="4.7"
+        >
+          <div
+            class="dest-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&quot;);
+            "
+          >
+            <span class="dest-badge">City Break</span>
+            <button class="dest-fav" onclick="toggleFav(this)">♡</button>
+            <span class="dest-badge-coming">Booking Soon</span>
+          </div>
+          <div class="dest-info">
+            <div class="dest-top">
+              <h3>Tokyo, Japan</h3>
+              <span>⭐ 4.7</span>
+            </div>
+            <p>
+              Ultra-modern city blending ancient temples with futuristic
+              skylines.
+            </p>
+            <div class="dest-footer">
+              <span class="dest-price">From ₹65,000</span>
+              <span class="dest-tag">🌆 City</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RAJASTHAN -->
+        <div
+          class="dest-card dest-card-static"
+          data-category="Culture"
+          data-price="30000"
+          data-rating="4.8"
+        >
+          <div
+            class="dest-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1548013146-72479768bada?w=600&quot;);
+            "
+          >
+            <span class="dest-badge">Heritage</span>
+            <button class="dest-fav" onclick="toggleFav(this)">♡</button>
+            <span class="dest-badge-coming">Booking Soon</span>
+          </div>
+          <div class="dest-info">
+            <div class="dest-top">
+              <h3>Rajasthan, India</h3>
+              <span>⭐ 4.8</span>
+            </div>
+            <p>Royal forts, colourful bazaars, and the golden Thar desert.</p>
+            <div class="dest-footer">
+              <span class="dest-price">From ₹30,000</span>
+              <span class="dest-tag">🏛️ Culture</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SWISS ALPS -->
+        <div
+          class="dest-card dest-card-static"
+          data-category="Adventure"
+          data-price="95000"
+          data-rating="4.9"
+        >
+          <div
+            class="dest-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1549880338-65ddcdfd017b?w=600&quot;);
+            "
+          >
+            <span class="dest-badge">Epic</span>
+            <button class="dest-fav" onclick="toggleFav(this)">♡</button>
+            <span class="dest-badge-coming">Booking Soon</span>
+          </div>
+          <div class="dest-info">
+            <div class="dest-top">
+              <h3>Swiss Alps, Switzerland</h3>
+              <span>⭐ 4.9</span>
+            </div>
+            <p>
+              Pristine glaciers, world-class skiing, and panoramic alpine views.
+            </p>
+            <div class="dest-footer">
+              <span class="dest-price">From ₹95,000</span>
+              <span class="dest-tag">🧗 Adventure</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SERENGETI -->
+        <div
+          class="dest-card dest-card-static"
+          data-category="Wildlife"
+          data-price="55000"
+          data-rating="4.7"
+        >
+          <div
+            class="dest-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=600&quot;);
+            "
+          >
+            <span class="dest-badge">Safari</span>
+            <button class="dest-fav" onclick="toggleFav(this)">♡</button>
+            <span class="dest-badge-coming">Booking Soon</span>
+          </div>
+          <div class="dest-info">
+            <div class="dest-top">
+              <h3>Serengeti, Tanzania</h3>
+              <span>⭐ 4.7</span>
+            </div>
+            <p>
+              Witness the great migration and Africa's iconic Big Five in the
+              wild.
+            </p>
+            <div class="dest-footer">
+              <span class="dest-price">From ₹55,000</span>
+              <span class="dest-tag">🦁 Wildlife</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- GOA -->
+        <div
+          class="dest-card dest-card-static"
+          data-category="Beach"
+          data-price="22000"
+          data-rating="4.6"
+        >
+          <div
+            class="dest-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&quot;);
+            "
+          >
+            <span class="dest-badge">Relaxing</span>
+            <button class="dest-fav" onclick="toggleFav(this)">♡</button>
+            <span class="dest-badge-coming">Booking Soon</span>
+          </div>
+          <div class="dest-info">
+            <div class="dest-top">
+              <h3>Goa, India</h3>
+              <span>⭐ 4.6</span>
+            </div>
+            <p>
+              Golden beaches, Portuguese heritage, and vibrant beach shacks.
+            </p>
+            <div class="dest-footer">
+              <span class="dest-price">From ₹22,000</span>
+              <span class="dest-tag">🏖️ Beach</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PARIS -->
+        <div
+          class="dest-card dest-card-static"
+          data-category="City"
+          data-price="75000"
+          data-rating="4.8"
+        >
+          <div
+            class="dest-img"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&quot;);
+            "
+          >
+            <span class="dest-badge">Romantic</span>
+            <button class="dest-fav" onclick="toggleFav(this)">♡</button>
+            <span class="dest-badge-coming">Booking Soon</span>
+          </div>
+          <div class="dest-info">
+            <div class="dest-top">
+              <h3>Paris, France</h3>
+              <span>⭐ 4.8</span>
+            </div>
+            <p>
+              The city of love — iconic architecture, world-class cuisine, and
+              art.
+            </p>
+            <div class="dest-footer">
+              <span class="dest-price">From ₹75,000</span>
+              <span class="dest-tag">🌆 City</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="noResults"
+        style="display: none; text-align: center; padding: 3rem; color: #888"
+      >
+        <h3>No destinations found.</h3>
+        <p>Try a different keyword or category.</p>
+      </div>
+    </section>
+
+    <!-- NOTIFY CTA -->
+    <section class="cta-section">
+      <h2>Want to Book a Trip?</h2>
+      <p>
+        Booking is coming soon! Sign up now and be the first to know when we go
+        live.
+      </p>
+      <div
+        style="
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-top: 2rem;
+        "
+      >
+        <a href="signup.html" class="btn-primary">Notify Me When Live</a>
+        <a href="trips.html" class="btn-outline-white">Preview Itineraries</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-bottom">
+        <p>
+          © 2025 RoamRight. All rights reserved. Designed in Gujarat, India.
+        </p>
+      </div>
+    </footer>
+
+    <div id="toast" class="toast"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
