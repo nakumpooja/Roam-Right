@@ -1,3 +1,9 @@
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
+
 # 🌍 RoamRight – UI/UX Travel Planning Website
 
 ## 📖 About the Project
@@ -66,6 +72,23 @@ The website was designed in Figma and developed using **HTML, CSS, JavaScript, a
 ---
 
 ## 📸 Screenshots
+
+## 📸 Project Screenshots
+
+<p align="center">
+  <img src="assets/screenshots/home.jpeg" width="45%" alt="Home Page">
+  <img src="assets/screenshots/login.jpeg" width="45%" alt="Login Page">
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/destination.jpeg" width="45%" alt="Destination Page">
+  <img src="assets/screenshots/trip.jpeg" width="45%" alt="Trip Planning Page">
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/about.jpeg" width="45%" alt="About Page">
+  <img src="assets/screenshots/contact.jpeg" width="45%" alt="Contact Page">
+</p>
 
 ### 🏠 Home Page
 
